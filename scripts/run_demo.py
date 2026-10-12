@@ -59,22 +59,35 @@ def stop(processes: list[subprocess.Popen[bytes]]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Check startup, then stop without opening a browser")
+    parser.add_argument("--live", action="store_true", help="Offer billable AI-assisted matching in the browser")
     args = parser.parse_args()
     processes: list[subprocess.Popen[bytes]] = []
     try:
         health = get(API + "/api/health")
         if health is None:
             environment = os.environ.copy()
-            environment.pop("VENTUREMATCH_ENABLE_LIVE_AGENT", None)
+            if args.live:
+                environment["VENTUREMATCH_ENABLE_LIVE_AGENT"] = "1"
+            else:
+                environment.pop("VENTUREMATCH_ENABLE_LIVE_AGENT", None)
             api = subprocess.Popen(
                 [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "8000"],
                 cwd=ROOT / "backend", env=environment,
             )
             processes.append(api)
             health = wait_for(API + "/api/health", api)
-        if json.loads(health).get("status") != "ok":
+        health_status = json.loads(health)
+        if health_status.get("status") != "ok":
             raise RuntimeError("Port 8000 is occupied by a different service.")
-        print("Backend ready: " + API, flush=True)
+        if args.live and not health_status.get("live_agent_enabled"):
+            raise RuntimeError(
+                "An engine-only backend is already running on port 8000. "
+                "Stop its terminal with Ctrl+C, then rerun with --live."
+            )
+        print(
+            "Backend ready: " + API + (" (AI-assisted available)" if health_status.get("live_agent_enabled") else " (free engine only)"),
+            flush=True,
+        )
 
         page = get(WEB)
         if page is None:
@@ -91,6 +104,8 @@ def main() -> int:
         if args.check:
             print("Local startup check passed.", flush=True)
             return 0
+        if args.live:
+            print("AI-assisted selection makes a billable OpenAI call only after browser confirmation.", flush=True)
         webbrowser.open(WEB)
         print("If your browser did not open, paste the demo URL above into Chrome.", flush=True)
         print("Keep this terminal open. Press Ctrl+C to stop servers started here.", flush=True)

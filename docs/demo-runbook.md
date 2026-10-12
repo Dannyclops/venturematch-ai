@@ -10,8 +10,11 @@ on 2026-10-12. Rehearse on the actual presentation machine before showing it.
    The launcher opens `http://127.0.0.1:3000/`; leave the terminal open.
 2. Check that the search panel says **Local API connected**.
 3. Leave execution on **Free matching engine** for a predictable, no-cost demo.
-   If the backend was intentionally started with the live flag, the AI option
-   becomes available, but each run consumes credits and needs confirmation.
+   To demonstrate the agent, stop the launcher with Ctrl+C and rerun it with
+   `--live`. Then refresh the browser, select **AI-assisted (uses credits)**,
+   and confirm one search. Each confirmed run consumes credits. Wait for a
+   result before clicking again; if the outcome is uncertain, inspect the
+   terminal and account usage before retrying.
 
 ## Two-minute walkthrough
 
@@ -38,7 +41,7 @@ on 2026-10-12. Rehearse on the actual presentation machine before showing it.
 - Thesis similarity is currently keyword-based, not embeddings. There is no
   conversation persistence, live market data, or deployment yet.
 - One founder CLI AI run was observed. Investor live outcome and paid browser
-  checks remain unverified; avoid claiming they succeeded.
+  checks remain unverified until a completed result is visible in the browser.
 
 If the browser cannot connect, use `http://127.0.0.1:8000/api/health` to check
 the backend and verify both terminals are still running. The scripted local

@@ -14,7 +14,19 @@ backend\.venv\Scripts\python.exe scripts\run_demo.py
 
 The launcher starts the engine-only backend and frontend, opens the browser,
 and stays running until Ctrl+C. If either service is already healthy, it reuses
-it. For separate terminals instead, in terminal 1:
+it.
+
+To demonstrate the optional agent, stop the free launcher with Ctrl+C and run:
+
+```powershell
+backend\.venv\Scripts\python.exe scripts\run_demo.py --live
+```
+
+This enables the AI-assisted choice but does not call OpenAI until you select
+that choice and confirm a search in the browser. Each confirmed search is
+billable. The backend loads the ignored `.env` key; the browser never receives
+it. If another engine-only backend still occupies port 8000, the launcher
+will tell you to stop it first. For separate terminals instead, in terminal 1:
 
 ```powershell
 cd backend

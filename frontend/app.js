@@ -176,6 +176,9 @@ function renderResult(result) {
   const highlights = new Map((result.highlights || []).map((item) => [item.candidate_id, item]));
   $("results").replaceChildren(...data.matches.map((match) => renderCard(match, highlights.get(match.candidate_entity_id))));
   const notes = $("run-notes");
+  if (isLive && data.activity?.length) {
+    notes.append(element("p", "", `Agent steps: ${data.activity.map((item) => `${labels(item.step)} (${item.status})`).join(" · ")}`));
+  }
   for (const warning of data.warnings || []) notes.append(element("p", "", warning));
   for (const missing of data.missing_information || []) notes.append(element("p", "", `Missing information: ${missing}`));
   if (isLive) {
