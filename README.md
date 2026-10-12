@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. The user reported successful founder and investor searches in the browser on 2026-10-12. One founder-side live AI run succeeded. Investor-side live AI and paid HTTP checks remain unverified.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. Both engine modes worked in the user's browser, one founder CLI AI run succeeded, and one investor AI-assisted browser run returned a ranked result on 2026-10-12. Individual-run cost remains unknown.
 
 ## The problem
 
@@ -134,10 +134,11 @@ cd venturematch-ai
 - [x] Expose matching functions through local typed tool dispatch
 - [x] Register tools and build the bounded VentureMatch Agent runtime
 - [x] Verify live OpenAI access and end-to-end founder tool calls
-- [ ] Verify end-to-end investor tool calls and measure live usage/cost
+- [x] Verify an AI-assisted investor result in the browser
+- [ ] Measure individual-run live usage/cost
 - [x] Build engine-only FastAPI profile and matching endpoints
 - [x] Add an explicitly enabled AI-assisted API adapter with local integration tests
-- [ ] Complete a live investor check and paid HTTP smoke check
+- [x] Complete a live investor check and paid HTTP browser smoke check
 - [x] Build a local founder and investor demo interface
 - [x] Verify founder and investor engine searches in the user's browser
 - [ ] Add conversational refinement

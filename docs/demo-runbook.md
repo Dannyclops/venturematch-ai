@@ -1,7 +1,8 @@
 # Local hackathon demo
 
 Both engine-only search directions were reported working in the user's browser
-on 2026-10-12. Rehearse on the actual presentation machine before showing it.
+on 2026-10-12. The same day, one AI-assisted investor browser run returned
+ColdChain Solar at 77.06/100 with evidence. Rehearse on the presentation machine.
 
 ## Before presenting
 
@@ -40,8 +41,8 @@ on 2026-10-12. Rehearse on the actual presentation machine before showing it.
   bounded AI run chooses evidence through the matching tools.
 - Thesis similarity is currently keyword-based, not embeddings. There is no
   conversation persistence, live market data, or deployment yet.
-- One founder CLI AI run was observed. Investor live outcome and paid browser
-  checks remain unverified until a completed result is visible in the browser.
+- One founder CLI AI run and one investor AI-assisted browser result were
+  observed. Individual-run token usage and billed cost were not established.
 
 If the browser cannot connect, use `http://127.0.0.1:8000/api/health` to check
 the backend and verify both terminals are still running. The scripted local

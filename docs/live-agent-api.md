@@ -113,8 +113,8 @@ ranking/evidence integrity, cleanup, concurrency, errors, secret redaction, mode
 separation, activation, and nested usage. These tests do not make paid API requests.
 
 On 2026-10-12 the complete suite passed: **204 tests passed in 9.97 seconds**.
-This verifies local behavior with scripted provider responses, not live investor
-access or the cost of a real HTTP invocation.
+This verifies local behavior with scripted provider responses. A later browser
+run established live investor access, but not the cost of that invocation.
 
 The earlier founder CLI live check succeeded. On 2026-10-12 investor CLI attempts
 could not be verified: automatic approval review rejected result collection because
@@ -122,3 +122,11 @@ it attempted an additional Visual Studio telemetry destination outside the OpenA
 call. The result of the later bounded attempt was also unavailable. Outcome and
 individual-run cost remain unknown. No paid HTTP test was launched. Inspect
 account usage and any remaining session state before another live retry.
+
+Later on 2026-10-12, the user ran the opt-in AI-assisted investor search through
+the browser. Supplied screenshots show `AI-assisted analysis`, one ranked match,
+fictional ColdChain Solar as **core eligible at 77.06/100**, the factor breakdown,
+agent-selected highlights section, traceable evidence, and concerns. This is a
+successful paid HTTP smoke check for the investor path. The screenshots do not
+show per-run token usage, billed cost, or cleanup diagnostics, so those remain
+unverified. No automatic retry or further paid check is needed for this result.

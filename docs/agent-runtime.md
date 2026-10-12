@@ -1,15 +1,16 @@
 # VentureMatch Agent runtime
 
-## Founder live run verified; investor verification pending
+## Founder CLI and investor browser live runs verified
 
 `backend/app/agent/` connects the existing request-bound tool dispatcher to the
 OpenAI **Agents API** (`client.beta.agents`), using the official Python client.
 It is not the separate `openai-agents` package, an Assistants API implementation,
 or a fixed sequence presented as an AI run. The model chooses function calls.
 Local scripted-provider tests do not establish remote API access or output quality.
-One successful founder-side live run is now verified as described below; broader
-quality and investor mode remain unverified. The [live-agent HTTP adapter](live-agent-api.md)
-has local integration coverage; paid HTTP verification remains pending.
+One founder-side CLI live run is verified as described below. The
+[live-agent HTTP adapter](live-agent-api.md) has local integration coverage
+and a later successful investor-side browser result. Broader match quality
+and individual-run billing remain unverified.
 
 ## First successful live check (2026-10-12)
 
@@ -30,7 +31,7 @@ After the user funded the API account, this bounded command succeeded:
 - `usage` was null. The installed SDK defines completed-event token usage as optional
   and best effort. Exact token usage and billed cost were not established; check the
   Platform usage/billing dashboard before additional paid experiments.
-- No additional model runs were made to obtain usage or test investor mode.
+- At that point, no additional model run was made solely to obtain usage.
 
 The first attempt in this session stopped during client construction because the
 environment's SOCKS proxy required `socksio`; no API request occurred on that attempt.
@@ -60,7 +61,8 @@ The first live session was inspected and successfully deleted on 2026-10-12.
 The recovery output confirmed `ok: true` and `deletion_confirmed: true`; the
 original turn had failed with `usage_limit_exceeded`. The account's billing screen
 showed a free trial with $0.00 credit remaining. The user subsequently purchased
-credits and the founder check above succeeded; investor-side live validation remains pending.
+credits and the founder check above succeeded. A subsequent investor browser
+run also returned a ranked AI-assisted result; see the live-agent API document.
 Safe diagnostics now include a stage, exception class, recognized provider code,
 HTTP status if available, and application file/line locations. There are no raw
 exception messages, headers, prompts, tool arguments, frame locals, or model output.
@@ -181,7 +183,8 @@ not resume a provider session in this version.
 
 The host enforces matching facts; prompts are not a complete prompt-injection defense.
 Catalog data and profiles remain untrusted. No live web enrichment, embedding upgrade,
-UI, valuation, or investment execution is included in this phase.
+valuation, or investment execution is included in this phase. A separate
+local browser demo now consumes this runtime through the optional API route.
 The separate [engine-only HTTP API](backend-api.md) is available without OpenAI calls.
 The [optional live-agent route](live-agent-api.md) requires explicit server activation
 and a live-request header; it does not change the CLI's behavior.

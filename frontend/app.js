@@ -46,7 +46,7 @@ function setMode(mode) {
     button.setAttribute("aria-pressed", String(mode === value));
   }
   $("objective").value = mode === "founder"
-    ? "Find investors aligned with our business, funding stage, and target markets."
+    ? "Find investors for SolarGrid Africa that support seed-stage climate technology in African markets."
     : "Find businesses that fit our investment thesis, including eligible exploration opportunities.";
   $("results").replaceChildren();
   $("run-notes").replaceChildren();
