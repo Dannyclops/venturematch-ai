@@ -15,3 +15,7 @@ This directory will contain the Next.js and TypeScript user interface.
 
 The frontend will consume the FastAPI service documented in [`../docs/architecture.md`](../docs/architecture.md).
 
+## Current structure
+
+`src/types/` mirrors the backend's Pydantic contracts. The backend remains the source of truth; these interfaces describe its JSON request and response shapes for the UI.
+

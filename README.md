@@ -122,7 +122,7 @@ cd venturematch-ai
 - [x] Define the product scope and exclusions
 - [x] Define the agentic architecture
 - [x] Create the repository structure
-- [ ] Define Pydantic and TypeScript schemas
+- [x] Define Pydantic and TypeScript schemas
 - [ ] Generate synthetic business and investor datasets
 - [ ] Implement deterministic eligibility filters
 - [ ] Implement and test the compatibility score
@@ -158,7 +158,8 @@ These exclusions keep the demo focused on explainable discovery and compatibilit
 
 ## Documentation
 
-See [`docs/architecture.md`](docs/architecture.md) for component responsibilities, the agent execution flow, scoring rules, and initial API boundaries.
+- [`docs/architecture.md`](docs/architecture.md) explains component responsibilities, the agent execution flow, scoring rules, and initial API boundaries.
+- [`docs/data-schemas.md`](docs/data-schemas.md) documents the contracts shared by the dataset, backend, agent, and frontend.
 
 ## License
 
