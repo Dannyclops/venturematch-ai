@@ -8,7 +8,14 @@ from typing import Annotated, Self
 from pydantic import Field, field_validator, model_validator
 
 from .business import BusinessProfile
-from .common import EntityId, FundingStage, Industry, MoneyRange, SchemaModel
+from .common import (
+    EntityId,
+    FundingStage,
+    Industry,
+    MoneyRange,
+    SchemaModel,
+    SupportedCurrency,
+)
 from .investor import InvestorProfile
 from .match import MatchResult
 
@@ -31,6 +38,8 @@ class MatchConstraints(SchemaModel):
     geographies: Annotated[list[str] | None, Field(min_length=1, max_length=20)] = None
     ticket_size: MoneyRange | None = None
     excluded_entity_ids: Annotated[list[EntityId], Field(max_length=100)] = Field(default_factory=list)
+    include_exploration_matches: bool = True
+    display_currency: SupportedCurrency = SupportedCurrency.USD
 
     @field_validator("geographies")
     @classmethod

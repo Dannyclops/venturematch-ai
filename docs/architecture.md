@@ -40,8 +40,8 @@ The first version uses synthetic JSON for portability and transparency. SQLite c
 
 1. The API validates the request.
 2. The agent determines the user mode and objective.
-3. `analyze_profile` normalises the supplied fields and reports missing information.
-4. A search tool retrieves candidates satisfying hard constraints.
+3. `analyze_profile` normalises the supplied fields, including money values through one timestamped FX snapshot, and reports missing information.
+4. A search tool classifies candidates as core eligible, exploration eligible, or ineligible according to hard constraints and the investor's stage policy.
 5. `score_matches` calculates component and total scores.
 6. Investor-mode requests may call `analyze_portfolio_fit`.
 7. `retrieve_match_evidence` supplies the factual basis for explanations.
@@ -78,6 +78,8 @@ Each recommended match must include:
 - Never claim that discovery constitutes due diligence.
 - Report missing information explicitly.
 - Preserve hard constraints during conversational refinement.
+- Preserve submitted currencies and expose the rate, source, timestamp, and estimated normalized value used for comparisons.
+- Label matches outside an investor's preferred funding stages as exploration results.
 
 ## MVP success criteria
 

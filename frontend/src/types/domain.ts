@@ -30,6 +30,17 @@ export type BusinessModel =
   | "saas"
   | "other";
 
+export type SupportedCurrency =
+  | "USD"
+  | "EUR"
+  | "TRY"
+  | "NGN"
+  | "GHS"
+  | "KES"
+  | "ZAR"
+  | "EGP"
+  | "AED";
+
 export interface Location {
   country_code: string;
   city: string | null;
@@ -38,13 +49,34 @@ export interface Location {
 
 export interface MoneyAmount {
   amount: number;
-  currency: string;
+  currency: SupportedCurrency;
 }
 
 export interface MoneyRange {
   minimum: number;
   maximum: number;
-  currency: string;
+  currency: SupportedCurrency;
+}
+
+export interface NormalizedMoneyAmount {
+  original: MoneyAmount;
+  normalized_amount: string;
+  normalized_currency: SupportedCurrency;
+  exchange_rate: string;
+  rate_timestamp: string;
+  rate_source: string;
+  is_estimate: boolean;
+}
+
+export interface NormalizedMoneyRange {
+  original: MoneyRange;
+  normalized_minimum: string;
+  normalized_maximum: string;
+  normalized_currency: SupportedCurrency;
+  exchange_rate: string;
+  rate_timestamp: string;
+  rate_source: string;
+  is_estimate: boolean;
 }
 
 export interface TractionMetrics {
@@ -82,6 +114,7 @@ export type InvestorType =
   | "venture_capital";
 
 export type InvestmentRole = "lead" | "follow" | "flexible";
+export type StageFlexibility = "strict" | "adjacent" | "open";
 
 export interface PortfolioCompany {
   id: string;
@@ -102,6 +135,8 @@ export interface InvestorProfile {
   preferred_industries: Industry[];
   excluded_industries: Industry[];
   preferred_stages: FundingStage[];
+  exploratory_stages: FundingStage[];
+  stage_flexibility: StageFlexibility;
   ticket_size: MoneyRange;
   preferred_geographies: string[];
   investment_role: InvestmentRole;

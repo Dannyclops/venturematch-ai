@@ -9,9 +9,12 @@ This directory contains the fictional dataset used for development, matching-eng
 | `businesses.json` | 24 | Companies seeking investment |
 | `investors.json` | 15 | Investor theses and eligibility preferences |
 | `portfolios.json` | 45 | Three portfolio companies for every investor |
+| `fx_rates.demo.json` | 1 | Fixed synthetic FX snapshot for reproducible normalization |
 | `manifest.json` | 1 | Dataset version, counts, file map, and synthetic-data notice |
 
 The businesses cover all ten MVP industries, multiple business models, pre-seed through Series A stages, and markets across Africa, Türkiye, MENA, and Europe.
+
+The dataset exercises all nine supported MVP currencies. Cross-currency comparisons use the single synthetic snapshot in `fx_rates.demo.json`.
 
 ## Why the records are deliberately varied
 
@@ -22,6 +25,8 @@ The data contains more than obvious positive matches. It includes:
 - Relevant investors whose ticket range is incompatible
 - Relevant investors whose stage preference is incompatible
 - Revenue-required investors and pre-revenue businesses
+- Strict, adjacent, and open funding-stage exploration policies
+- Ticket sizes expressed in different currencies but comparable through one FX snapshot
 - Businesses with several plausible investors
 - A small number of intentionally difficult or unmatched profiles
 
@@ -47,6 +52,8 @@ It checks:
 - Portfolio foreign-key references
 - Supported enums
 - Money ranges and currency formats
+- FX snapshot coverage and conversion inputs
+- Funding-stage flexibility rules
 - Required text and list fields
 - Revenue consistency
 - Investor industry conflicts
@@ -58,6 +65,8 @@ The validator complements the canonical Pydantic models in `backend/app/models/`
 ## Data safety
 
 Every company, investor, portfolio, metric, and investment thesis is fictional. The records must never be represented as real fundraising opportunities, verified investor preferences, financial advice, or completed due diligence.
+
+The FX rates are also synthetic demo values. They are fixed for repeatable tests and must not be represented as live or historical exchange rates.
 
 Do not add private contact information, confidential pitch material, or scraped personal data. Generated or temporary datasets belong in `data/generated/`, which is ignored by Git.
 

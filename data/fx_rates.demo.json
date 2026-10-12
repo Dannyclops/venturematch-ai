@@ -1,0 +1,18 @@
+{
+  "base_currency": "USD",
+  "as_of": "2026-10-12T00:00:00Z",
+  "source": "synthetic_hackathon_demo",
+  "is_live": false,
+  "rates": [
+    {"currency": "USD", "rate_to_base": "1"},
+    {"currency": "EUR", "rate_to_base": "1.10"},
+    {"currency": "TRY", "rate_to_base": "0.0285714286"},
+    {"currency": "NGN", "rate_to_base": "0.000625"},
+    {"currency": "GHS", "rate_to_base": "0.08"},
+    {"currency": "KES", "rate_to_base": "0.00775"},
+    {"currency": "ZAR", "rate_to_base": "0.0556"},
+    {"currency": "EGP", "rate_to_base": "0.02"},
+    {"currency": "AED", "rate_to_base": "0.2723"}
+  ],
+  "notice": "These are synthetic demonstration rates, not live or historical market rates. Replace this snapshot with an attributable FX provider before production use."
+}

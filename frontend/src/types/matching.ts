@@ -4,6 +4,7 @@ import type {
   Industry,
   InvestorProfile,
   MoneyRange,
+  SupportedCurrency,
 } from "./domain";
 
 export type UserMode = "founder" | "investor";
@@ -62,6 +63,8 @@ export interface MatchConstraints {
   geographies: string[] | null;
   ticket_size: MoneyRange | null;
   excluded_entity_ids: string[];
+  include_exploration_matches: boolean;
+  display_currency: SupportedCurrency;
 }
 
 export interface MatchRequest {

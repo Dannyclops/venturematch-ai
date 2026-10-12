@@ -66,7 +66,7 @@ The first scoring model uses the following provisional weights:
 | Geographic alignment | 10% |
 | Portfolio compatibility | 10% |
 
-Hard constraints are applied before scoring. For example, an investor whose minimum ticket is greater than the company's funding requirement should not be presented as a strong match merely because their industry preferences are similar.
+Hard constraints are applied before scoring. Money is compared in USD using a timestamped FX snapshot while preserving the user's original currency. Funding-stage results distinguish an investor's normal mandate from clearly labelled exploration matches; neither semantic similarity nor stage exploration overrides other hard constraints.
 
 ## Planned agent tools
 
@@ -124,6 +124,7 @@ cd venturematch-ai
 - [x] Create the repository structure
 - [x] Define Pydantic and TypeScript schemas
 - [x] Generate synthetic business and investor datasets
+- [x] Add multi-currency normalization and flexible stage policies
 - [ ] Implement deterministic eligibility filters
 - [ ] Implement and test the compatibility score
 - [ ] Expose matching functions as agent tools
@@ -160,6 +161,7 @@ These exclusions keep the demo focused on explainable discovery and compatibilit
 
 - [`docs/architecture.md`](docs/architecture.md) explains component responsibilities, the agent execution flow, scoring rules, and initial API boundaries.
 - [`docs/data-schemas.md`](docs/data-schemas.md) documents the contracts shared by the dataset, backend, agent, and frontend.
+- [`docs/currency-and-stage-policy.md`](docs/currency-and-stage-policy.md) defines supported currencies, FX provenance, and strict, adjacent, and open funding-stage exploration.
 
 ## License
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime
+from decimal import Decimal
 from enum import Enum
 from typing import Annotated, Self
 
@@ -16,11 +18,6 @@ EntityId = Annotated[
         pattern=r"^[a-z0-9][a-z0-9_-]*$",
         examples=["business_solargrid"],
     ),
-]
-
-CurrencyCode = Annotated[
-    str,
-    Field(pattern=r"^[A-Z]{3}$", examples=["USD", "EUR", "TRY"]),
 ]
 
 Score = Annotated[float, Field(ge=0, le=100)]
@@ -69,6 +66,18 @@ class BusinessModel(str, Enum):
     OTHER = "other"
 
 
+class SupportedCurrency(str, Enum):
+    USD = "USD"
+    EUR = "EUR"
+    TRY = "TRY"
+    NGN = "NGN"
+    GHS = "GHS"
+    KES = "KES"
+    ZAR = "ZAR"
+    EGP = "EGP"
+    AED = "AED"
+
+
 class Location(SchemaModel):
     """A physical headquarters or portfolio-company location."""
 
@@ -86,7 +95,7 @@ class MoneyAmount(SchemaModel):
     """One exact monetary amount, such as a founder's current raise."""
 
     amount: Annotated[int, Field(gt=0)]
-    currency: CurrencyCode = "USD"
+    currency: SupportedCurrency = SupportedCurrency.USD
 
     @field_validator("currency", mode="before")
     @classmethod
@@ -99,7 +108,7 @@ class MoneyRange(SchemaModel):
 
     minimum: Annotated[int, Field(ge=0)]
     maximum: Annotated[int, Field(gt=0)]
-    currency: CurrencyCode = "USD"
+    currency: SupportedCurrency = SupportedCurrency.USD
 
     @field_validator("currency", mode="before")
     @classmethod
@@ -110,6 +119,69 @@ class MoneyRange(SchemaModel):
     def maximum_must_cover_minimum(self) -> Self:
         if self.maximum < self.minimum:
             raise ValueError("maximum must be greater than or equal to minimum")
+        return self
+
+
+class FxRate(SchemaModel):
+    """Conversion value for one unit of a currency into the base currency."""
+
+    currency: SupportedCurrency
+    rate_to_base: Annotated[Decimal, Field(gt=0, max_digits=20, decimal_places=12)]
+
+
+class FxSnapshot(SchemaModel):
+    """A timestamped, attributable collection of currency conversion rates."""
+
+    base_currency: SupportedCurrency = SupportedCurrency.USD
+    as_of: datetime
+    source: Annotated[str, Field(min_length=3, max_length=120)]
+    is_live: bool
+    rates: Annotated[list[FxRate], Field(min_length=1)]
+    notice: Annotated[str, Field(min_length=10, max_length=500)]
+
+    @model_validator(mode="after")
+    def rates_must_be_unique_and_include_base(self) -> Self:
+        currencies = [rate.currency for rate in self.rates]
+        if len(currencies) != len(set(currencies)):
+            raise ValueError("rates must contain each currency only once")
+
+        base_rate = next(
+            (rate.rate_to_base for rate in self.rates if rate.currency == self.base_currency),
+            None,
+        )
+        if base_rate != Decimal("1"):
+            raise ValueError("rates must include the base currency with rate_to_base=1")
+        return self
+
+
+class NormalizedMoneyAmount(SchemaModel):
+    """An original amount plus its reproducible base-currency estimate."""
+
+    original: MoneyAmount
+    normalized_amount: Annotated[Decimal, Field(gt=0, max_digits=24, decimal_places=2)]
+    normalized_currency: SupportedCurrency
+    exchange_rate: Annotated[Decimal, Field(gt=0, max_digits=20, decimal_places=12)]
+    rate_timestamp: datetime
+    rate_source: Annotated[str, Field(min_length=3, max_length=120)]
+    is_estimate: bool = True
+
+
+class NormalizedMoneyRange(SchemaModel):
+    """An original range plus its reproducible base-currency estimate."""
+
+    original: MoneyRange
+    normalized_minimum: Annotated[Decimal, Field(ge=0, max_digits=24, decimal_places=2)]
+    normalized_maximum: Annotated[Decimal, Field(gt=0, max_digits=24, decimal_places=2)]
+    normalized_currency: SupportedCurrency
+    exchange_rate: Annotated[Decimal, Field(gt=0, max_digits=20, decimal_places=12)]
+    rate_timestamp: datetime
+    rate_source: Annotated[str, Field(min_length=3, max_length=120)]
+    is_estimate: bool = True
+
+    @model_validator(mode="after")
+    def normalized_range_must_be_ordered(self) -> Self:
+        if self.normalized_maximum < self.normalized_minimum:
+            raise ValueError("normalized_maximum must cover normalized_minimum")
         return self
 
 

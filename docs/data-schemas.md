@@ -8,7 +8,7 @@ These schemas form the contract among the synthetic dataset, matching engine, ag
 
 | Group | Core models | Purpose |
 |---|---|---|
-| Shared values | `Location`, `MoneyAmount`, `MoneyRange` | Reusable validated primitives |
+| Shared values | `Location`, `MoneyAmount`, `MoneyRange`, `FxSnapshot`, normalized money models | Reusable validated primitives and currency-conversion evidence |
 | Business | `BusinessProfile`, `TractionMetrics` | Founder and company information |
 | Investor | `InvestorProfile`, `PortfolioCompany` | Investment preferences and portfolio evidence |
 | Matching | `ScoreBreakdown`, `MatchEvidence`, `MatchConcern`, `MatchResult` | Explainable ranked recommendations |
@@ -19,6 +19,12 @@ These schemas form the contract among the synthetic dataset, matching engine, ag
 ### Exact amount versus range
 
 `MoneyAmount` represents one amount, such as a company raising USD 750,000. `MoneyRange` represents an investor's acceptable inclusive ticket range, such as USD 250,000–1,500,000.
+
+The original currency is preserved. `NormalizedMoneyAmount` and `NormalizedMoneyRange` add a derived USD value, the applied rate, its source and timestamp, and an estimate flag. Matching logic compares normalized amounts from the same FX snapshot.
+
+### Preferred versus exploratory stages
+
+`preferred_stages` represents the investor's normal mandate. `stage_flexibility` determines whether VentureMatch may also consider explicitly adjacent stages or any stage. Exploration changes candidate discovery, not the underlying investor preference, and every result outside the normal mandate must be labelled.
 
 ### Hard constraints versus scores
 
@@ -39,7 +45,7 @@ This prevents ambiguous tool selection and accidental cross-mode processing.
 
 - Entity identifiers use lowercase letters, numbers, underscores, and hyphens.
 - Country codes use two uppercase ISO-style characters.
-- Currency codes use three uppercase ISO-style characters.
+- Currency values are restricted to the nine currencies supported by the MVP and are normalized to uppercase.
 - User-entered matching terms are trimmed, converted to lowercase, and de-duplicated.
 - Compatibility scores range from 0 to 100.
 - Unknown fields are rejected instead of being silently ignored.
@@ -50,5 +56,5 @@ This prevents ambiguous tool selection and accidental cross-mode processing.
 - Backend contract tests: `backend/tests/test_schemas.py`
 - Frontend mirror: `frontend/src/types/`
 
-The next development stage will create synthetic JSON records that validate against these models.
+See [`currency-and-stage-policy.md`](currency-and-stage-policy.md) for conversion provenance and funding-stage exploration rules.
 

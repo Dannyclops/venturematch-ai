@@ -33,6 +33,23 @@ class InvestmentRole(str, Enum):
     FLEXIBLE = "flexible"
 
 
+class StageFlexibility(str, Enum):
+    STRICT = "strict"
+    ADJACENT = "adjacent"
+    OPEN = "open"
+
+
+FUNDING_STAGE_ORDER = {
+    FundingStage.BOOTSTRAPPED: 0,
+    FundingStage.PRE_SEED: 1,
+    FundingStage.SEED: 2,
+    FundingStage.SERIES_A: 3,
+    FundingStage.SERIES_B: 4,
+    FundingStage.SERIES_C_PLUS: 5,
+    FundingStage.GROWTH: 6,
+}
+
+
 class PortfolioCompany(SchemaModel):
     """Minimal evidence-bearing portfolio record used for fit analysis."""
 
@@ -61,6 +78,8 @@ class InvestorProfile(SchemaModel):
     preferred_industries: Annotated[list[Industry], Field(min_length=1, max_length=10)]
     excluded_industries: Annotated[list[Industry], Field(max_length=10)] = Field(default_factory=list)
     preferred_stages: Annotated[list[FundingStage], Field(min_length=1, max_length=7)]
+    exploratory_stages: Annotated[list[FundingStage], Field(max_length=7)] = Field(default_factory=list)
+    stage_flexibility: StageFlexibility = StageFlexibility.STRICT
     ticket_size: MoneyRange
     preferred_geographies: Annotated[list[str], Field(min_length=1, max_length=20)]
     investment_role: InvestmentRole = InvestmentRole.FLEXIBLE
@@ -84,5 +103,28 @@ class InvestorProfile(SchemaModel):
         overlap = set(self.preferred_industries) & set(self.excluded_industries)
         if overlap:
             raise ValueError("preferred_industries and excluded_industries must not overlap")
+        return self
+
+    @model_validator(mode="after")
+    def stage_policy_must_be_consistent(self) -> Self:
+        preferred = set(self.preferred_stages)
+        exploratory = set(self.exploratory_stages)
+
+        if preferred & exploratory:
+            raise ValueError("preferred_stages and exploratory_stages must not overlap")
+        if self.stage_flexibility is StageFlexibility.STRICT and exploratory:
+            raise ValueError("strict stage policy cannot define exploratory_stages")
+        if self.stage_flexibility is StageFlexibility.OPEN and exploratory:
+            raise ValueError("open stage policy infers all non-preferred stages automatically")
+        if self.stage_flexibility is StageFlexibility.ADJACENT:
+            if not exploratory:
+                raise ValueError("adjacent stage policy requires exploratory_stages")
+            for stage in exploratory:
+                is_adjacent = any(
+                    abs(FUNDING_STAGE_ORDER[stage] - FUNDING_STAGE_ORDER[core_stage]) == 1
+                    for core_stage in preferred
+                )
+                if not is_adjacent:
+                    raise ValueError(f"{stage.value} is not adjacent to a preferred stage")
         return self
 

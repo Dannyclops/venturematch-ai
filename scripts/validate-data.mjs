@@ -44,8 +44,18 @@ const investorTypes = new Set([
 ]);
 
 const investmentRoles = new Set(["lead", "follow", "flexible"]);
+const stageFlexibilities = new Set(["strict", "adjacent", "open"]);
+const supportedCurrencies = new Set(["USD", "EUR", "TRY", "NGN", "GHS", "KES", "ZAR", "EGP", "AED"]);
+const fundingStageOrder = new Map([
+  ["bootstrapped", 0],
+  ["pre_seed", 1],
+  ["seed", 2],
+  ["series_a", 3],
+  ["series_b", 4],
+  ["series_c_plus", 5],
+  ["growth", 6],
+]);
 const idPattern = /^[a-z0-9][a-z0-9_-]{2,63}$/;
-const currencyPattern = /^[A-Z]{3}$/;
 const countryPattern = /^[A-Z]{2}$/;
 
 const errors = [];
@@ -96,7 +106,7 @@ function expectMoneyAmount(value, path) {
   expect(value && typeof value === "object" && !Array.isArray(value), path, "must be an object");
   if (!value || typeof value !== "object" || Array.isArray(value)) return;
   expect(Number.isInteger(value.amount) && value.amount > 0, `${path}.amount`, "must be a positive integer");
-  expect(currencyPattern.test(value.currency ?? ""), `${path}.currency`, "must be a three-letter uppercase code");
+  expectEnum(value.currency, supportedCurrencies, `${path}.currency`);
 }
 
 function expectMoneyRange(value, path) {
@@ -105,7 +115,7 @@ function expectMoneyRange(value, path) {
   expect(Number.isInteger(value.minimum) && value.minimum >= 0, `${path}.minimum`, "must be a non-negative integer");
   expect(Number.isInteger(value.maximum) && value.maximum > 0, `${path}.maximum`, "must be a positive integer");
   expect(value.maximum >= value.minimum, path, "maximum must be greater than or equal to minimum");
-  expect(currencyPattern.test(value.currency ?? ""), `${path}.currency`, "must be a three-letter uppercase code");
+  expectEnum(value.currency, supportedCurrencies, `${path}.currency`);
 }
 
 function expectUniqueIds(records, collectionName) {
@@ -162,6 +172,29 @@ function validateInvestor(investor, index, portfolioIds) {
   investor.preferred_stages?.forEach((value, itemIndex) =>
     expectEnum(value, fundingStages, `${path}.preferred_stages[${itemIndex}]`),
   );
+  expect(Array.isArray(investor.exploratory_stages), `${path}.exploratory_stages`, "must be an array");
+  investor.exploratory_stages?.forEach((value, itemIndex) =>
+    expectEnum(value, fundingStages, `${path}.exploratory_stages[${itemIndex}]`),
+  );
+  expectEnum(investor.stage_flexibility, stageFlexibilities, `${path}.stage_flexibility`);
+  const stageOverlap =
+    investor.preferred_stages?.filter((value) => investor.exploratory_stages?.includes(value)) ?? [];
+  expect(stageOverlap.length === 0, path, "preferred and exploratory stages overlap");
+  if (investor.stage_flexibility === "strict") {
+    expect(investor.exploratory_stages?.length === 0, path, "strict policy cannot define exploratory stages");
+  }
+  if (investor.stage_flexibility === "open") {
+    expect(investor.exploratory_stages?.length === 0, path, "open policy must infer exploratory stages");
+  }
+  if (investor.stage_flexibility === "adjacent") {
+    expect(investor.exploratory_stages?.length > 0, path, "adjacent policy requires exploratory stages");
+    investor.exploratory_stages?.forEach((stage) => {
+      const isAdjacent = investor.preferred_stages.some(
+        (coreStage) => Math.abs(fundingStageOrder.get(stage) - fundingStageOrder.get(coreStage)) === 1,
+      );
+      expect(isAdjacent, path, `${stage} is not adjacent to a preferred stage`);
+    });
+  }
   expectMoneyRange(investor.ticket_size, `${path}.ticket_size`);
   expectStringArray(investor.preferred_geographies, `${path}.preferred_geographies`, 1, 20);
   expectEnum(investor.investment_role, investmentRoles, `${path}.investment_role`);
@@ -187,15 +220,46 @@ function validatePortfolioCompany(company, index) {
   expectStringArray(company.keywords, `${path}.keywords`, 1, 20);
 }
 
-function businessHasStructurallyEligibleInvestor(business, investors) {
+function validateFxSnapshot(snapshot) {
+  expect(snapshot.base_currency === "USD", "fx.base_currency", "demo base currency must be USD");
+  expect(snapshot.is_live === false, "fx.is_live", "demo rates must never be marked live");
+  expectString(snapshot.source, "fx.source", 3, 120);
+  expectString(snapshot.notice, "fx.notice", 10, 500);
+  expect(Array.isArray(snapshot.rates), "fx.rates", "must be an array");
+
+  const rateCurrencies = snapshot.rates?.map((item) => item.currency) ?? [];
+  expect(new Set(rateCurrencies).size === rateCurrencies.length, "fx.rates", "contains duplicate currencies");
+  supportedCurrencies.forEach((currency) => {
+    expect(rateCurrencies.includes(currency), "fx.rates", `is missing ${currency}`);
+  });
+  snapshot.rates?.forEach((item, index) => {
+    expectEnum(item.currency, supportedCurrencies, `fx.rates[${index}].currency`);
+    expect(Number(item.rate_to_base) > 0, `fx.rates[${index}].rate_to_base`, "must be positive");
+  });
+  const baseRate = snapshot.rates?.find((item) => item.currency === snapshot.base_currency);
+  expect(Number(baseRate?.rate_to_base) === 1, "fx.rates", "must include USD with rate 1");
+}
+
+function rateMap(snapshot) {
+  return new Map(snapshot.rates.map((item) => [item.currency, Number(item.rate_to_base)]));
+}
+
+function stageIsAcceptedForDiscovery(stage, investor) {
+  if (investor.preferred_stages.includes(stage)) return true;
+  if (investor.stage_flexibility === "open") return true;
+  return investor.exploratory_stages.includes(stage);
+}
+
+function businessHasStructurallyEligibleInvestor(business, investors, rates) {
   const isRevenueGenerating = business.traction?.is_revenue_generating ?? false;
+  const businessAmountInUsd = business.amount_raising.amount * rates.get(business.amount_raising.currency);
   return investors.some((investor) => {
     const industryMatches = investor.preferred_industries.includes(business.primary_industry);
-    const stageMatches = investor.preferred_stages.includes(business.funding_stage);
+    const stageMatches = stageIsAcceptedForDiscovery(business.funding_stage, investor);
+    const investorMinimumInUsd = investor.ticket_size.minimum * rates.get(investor.ticket_size.currency);
+    const investorMaximumInUsd = investor.ticket_size.maximum * rates.get(investor.ticket_size.currency);
     const amountMatches =
-      investor.ticket_size.currency === business.amount_raising.currency &&
-      business.amount_raising.amount >= investor.ticket_size.minimum &&
-      business.amount_raising.amount <= investor.ticket_size.maximum;
+      businessAmountInUsd >= investorMinimumInUsd && businessAmountInUsd <= investorMaximumInUsd;
     const revenueMatches = !investor.requires_revenue || isRevenueGenerating;
     return industryMatches && stageMatches && amountMatches && revenueMatches;
   });
@@ -206,8 +270,9 @@ async function readJson(fileName) {
   return JSON.parse(raw);
 }
 
-const [manifest, businesses, investors, portfolios] = await Promise.all([
+const [manifest, fxSnapshot, businesses, investors, portfolios] = await Promise.all([
   readJson("manifest.json"),
+  readJson("fx_rates.demo.json"),
   readJson("businesses.json"),
   readJson("investors.json"),
   readJson("portfolios.json"),
@@ -218,6 +283,8 @@ expect(Array.isArray(investors), "investors", "must be a JSON array");
 expect(Array.isArray(portfolios), "portfolios", "must be a JSON array");
 
 if (Array.isArray(businesses) && Array.isArray(investors) && Array.isArray(portfolios)) {
+  validateFxSnapshot(fxSnapshot);
+  const rates = rateMap(fxSnapshot);
   expect(businesses.length === manifest.counts.businesses, "manifest.counts.businesses", "does not match file count");
   expect(investors.length === manifest.counts.investors, "manifest.counts.investors", "does not match file count");
   expect(portfolios.length === manifest.counts.portfolio_companies, "manifest.counts.portfolio_companies", "does not match file count");
@@ -253,7 +320,7 @@ if (Array.isArray(businesses) && Array.isArray(investors) && Array.isArray(portf
   });
 
   const structurallyMatchable = businesses.filter((business) =>
-    businessHasStructurallyEligibleInvestor(business, investors),
+    businessHasStructurallyEligibleInvestor(business, investors, rates),
   );
   expect(
     structurallyMatchable.length >= 20,
@@ -272,8 +339,9 @@ if (errors.length > 0) {
   console.log(`- Investors: ${investors.length}`);
   console.log(`- Portfolio companies: ${portfolios.length}`);
   console.log(`- Industry coverage: ${new Set(businesses.map((item) => item.primary_industry)).size}/${industries.size}`);
+  console.log(`- Currency coverage: ${new Set(businesses.map((item) => item.amount_raising.currency)).size}/${supportedCurrencies.size}`);
   console.log(
-    `- Structurally matchable businesses: ${businesses.filter((item) => businessHasStructurallyEligibleInvestor(item, investors)).length}/${businesses.length}`,
+    `- Structurally discoverable businesses: ${businesses.filter((item) => businessHasStructurallyEligibleInvestor(item, investors, rateMap(fxSnapshot))).length}/${businesses.length}`,
   );
 }
 

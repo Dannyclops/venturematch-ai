@@ -10,7 +10,8 @@
   "files": {
     "businesses": "businesses.json",
     "investors": "investors.json",
-    "portfolio_companies": "portfolios.json"
+    "portfolio_companies": "portfolios.json",
+    "demo_fx_snapshot": "fx_rates.demo.json"
   },
   "notice": "Every named entity and metric in these files is fictional and must not be presented as a real investment opportunity or investor profile."
 }

@@ -16,7 +16,8 @@ The matching engine must remain usable and testable independently of the languag
 ## Current structure
 
 - `app/models/` contains the canonical Pydantic data contracts.
-- `tests/test_schemas.py` contains schema validation tests.
+- `app/services/currency.py` normalizes supported currencies through a versioned FX snapshot.
+- `tests/` contains schema and currency-service contract tests.
 - `pyproject.toml` declares the Python and development dependencies.
 
 Install the backend development dependencies from this directory with:

@@ -15,6 +15,7 @@ from app.models import (
     MatchRequest,
     MoneyAmount,
     MoneyRange,
+    StageFlexibility,
     TractionMetrics,
     UserMode,
 )
@@ -121,4 +122,32 @@ def test_investor_cannot_prefer_and_exclude_same_industry() -> None:
 
     with pytest.raises(ValidationError):
         InvestorProfile.model_validate(payload)
+
+
+def test_adjacent_stage_policy_accepts_an_adjacent_exploratory_stage() -> None:
+    payload = sample_investor().model_dump()
+    payload["stage_flexibility"] = StageFlexibility.ADJACENT
+    payload["exploratory_stages"] = [FundingStage.SERIES_A]
+
+    investor = InvestorProfile.model_validate(payload)
+
+    assert investor.exploratory_stages == [FundingStage.SERIES_A]
+
+
+def test_adjacent_stage_policy_rejects_a_non_adjacent_stage() -> None:
+    payload = sample_investor().model_dump()
+    payload["stage_flexibility"] = StageFlexibility.ADJACENT
+    payload["exploratory_stages"] = [FundingStage.GROWTH]
+
+    with pytest.raises(ValidationError):
+        InvestorProfile.model_validate(payload)
+
+
+def test_open_stage_policy_does_not_require_an_exploratory_list() -> None:
+    payload = sample_investor().model_dump()
+    payload["stage_flexibility"] = StageFlexibility.OPEN
+
+    investor = InvestorProfile.model_validate(payload)
+
+    assert investor.exploratory_stages == []
 

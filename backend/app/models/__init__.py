@@ -15,14 +15,20 @@ from .common import (
     FundingStage,
     Industry,
     Location,
+    FxRate,
+    FxSnapshot,
     MoneyAmount,
     MoneyRange,
+    NormalizedMoneyAmount,
+    NormalizedMoneyRange,
+    SupportedCurrency,
 )
 from .investor import (
     InvestmentRole,
     InvestorProfile,
     InvestorType,
     PortfolioCompany,
+    StageFlexibility,
 )
 from .match import (
     ConfidenceLevel,
@@ -43,6 +49,8 @@ __all__ = [
     "ConfidenceLevel",
     "ConcernSeverity",
     "FundingStage",
+    "FxRate",
+    "FxSnapshot",
     "Industry",
     "InvestmentRole",
     "InvestorProfile",
@@ -58,9 +66,13 @@ __all__ = [
     "MatchResult",
     "MoneyAmount",
     "MoneyRange",
+    "NormalizedMoneyAmount",
+    "NormalizedMoneyRange",
     "PortfolioCompany",
     "RefinementRequest",
     "ScoreBreakdown",
+    "StageFlexibility",
+    "SupportedCurrency",
     "TractionMetrics",
     "UserMode",
 ]
