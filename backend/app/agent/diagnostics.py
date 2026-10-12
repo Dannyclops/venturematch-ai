@@ -25,7 +25,7 @@ EXCEPTION_TYPES = frozenset({
     "BadRequestError", "AuthenticationError", "PermissionDeniedError", "NotFoundError",
     "ConflictError", "UnprocessableEntityError", "RateLimitError", "InternalServerError",
     "AttributeError", "TypeError", "ValueError", "KeyError", "RuntimeError", "TimeoutError",
-    "ValidationError", "PydanticSerializationError", "JSONDecodeError", "AgentFailure",
+    "ValidationError", "PydanticSerializationError", "JSONDecodeError", "AgentFailure", "ImportError",
 })
 AGENT_DIRECTORY = Path(__file__).resolve().parent
 

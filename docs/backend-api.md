@@ -124,4 +124,5 @@ constraints, input validation, safe errors, CORS, and OpenAPI contracts.
 HTTP tests do not call OpenAI or require a running server. They do require a working
 asyncio runtime. Earlier sessions stalled at Windows socket-pair initialization;
 the full suite completed in this session. Use normal PowerShell if that environment
-restriction recurs. A successful live AI run still requires separate verification.
+restriction recurs. One founder CLI live run is now verified (see
+[agent runtime](agent-runtime.md)); the HTTP service remains engine-only.

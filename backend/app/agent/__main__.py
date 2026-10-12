@@ -11,6 +11,7 @@ from openai import AsyncOpenAI
 
 from app.models import MatchRequest
 from app.tools import MatchingCatalog, MatchingTools
+from .diagnostics import safe_exception
 from .runtime import AgentFailure, AgentSettings, VentureMatchAgent, function_definitions
 
 
@@ -70,6 +71,15 @@ def main(argv: list[str] | None = None) -> None:
         print(json.dumps({"ok": False, "error": {"code": "interrupted",
               "message": "Run interrupted; verify remote session cleanup before retrying."}}))
         raise SystemExit(130) from None
+    except Exception as error:
+        # Client construction/context errors occur outside the runtime's diagnostics.
+        # Do not expose proxy URLs, credentials, or raw SDK exception messages.
+        print(json.dumps({"ok": False, "error": {
+            "code": "client_error",
+            "message": "Client setup or lifecycle failed; inspect the safe diagnostics.",
+            "diagnostics": safe_exception(error, "client_setup"),
+        }}, indent=2))
+        raise SystemExit(1) from None
     print(json.dumps({"ok": True, "data": result.model_dump(mode="json")}, indent=2))
 
 

@@ -1,12 +1,44 @@
 # VentureMatch Agent runtime
 
-## Implemented, with live verification still required
+## Founder live run verified; investor verification pending
 
 `backend/app/agent/` connects the existing request-bound tool dispatcher to the
 OpenAI **Agents API** (`client.beta.agents`), using the official Python client.
 It is not the separate `openai-agents` package, an Assistants API implementation,
 or a fixed sequence presented as an AI run. The model chooses function calls.
 Local scripted-provider tests do not establish remote API access or output quality.
+One successful founder-side live run is now verified as described below; broader
+quality, investor mode, and live-agent HTTP integration remain unverified.
+
+## First successful live check (2026-10-12)
+
+After the user funded the API account, this bounded command succeeded:
+
+```powershell
+.\.venv\Scripts\python.exe -m app.agent --business business_solargrid_africa --live --top-k 1 --timeout 120
+```
+
+- Model: `gpt-6-astra`; default small hosted sandbox, network disabled.
+- The model requested `analyze_profile` and full-catalog `score_matches`.
+- Top result: fictional Sahel Impact Partners (`investor_sahel_impact`), a core
+  match at **77.36/100**, validated against the deterministic engine.
+- The model selected industry and geography evidence; the backend copied the
+  supporting statements from the engine's evidence records.
+- The run returned `ok: true`, with no cleanup warnings or cleanup diagnostics.
+  This reports the cleanup request outcome, not physical sandbox teardown timing.
+- `usage` was null. The installed SDK defines completed-event token usage as optional
+  and best effort. Exact token usage and billed cost were not established; check the
+  Platform usage/billing dashboard before additional paid experiments.
+- No additional model runs were made to obtain usage or test investor mode.
+
+The first attempt in this session stopped during client construction because the
+environment's SOCKS proxy required `socksio`; no API request occurred on that attempt.
+Installing `socksio` in the local venv allowed the single live retry above. Proxy
+settings were retained. Client setup/lifecycle failures now return safe JSON diagnostics
+instead of raw tracebacks. All **34 diagnostic regression tests passed in 3.93 seconds**
+after that change, including the new client-construction privacy test.
+
+## Automated verification history
 
 Initial runtime verification: **128 tests passed in 4.84 seconds** in the user's normal
 PowerShell terminal on 2026-10-12, as confirmed by the supplied test-result screenshot.
@@ -15,7 +47,7 @@ inside the restricted development environment; its Windows asyncio socket-pair
 startup stalls before application code starts, so async runs should use a normal
 terminal. After the recovery changes, the complete suite passed in the user's normal
 PowerShell terminal: **161 tests passed in 6.18 seconds** on 2026-10-12, confirmed
-by the supplied screenshot. End-to-end live matching is not yet verified.
+by the supplied screenshot. At that point, end-to-end live matching was not yet verified.
 After adding the engine-only HTTP API, the full suite also completed in the development
 session: **184 tests passed in 14.42 seconds**, including the asynchronous tests.
 The earlier asyncio startup restriction did not recur during that verification.
@@ -26,8 +58,8 @@ Run the complete suite with `.\.venv\Scripts\python.exe -m pytest -q`.
 The first live session was inspected and successfully deleted on 2026-10-12.
 The recovery output confirmed `ok: true` and `deletion_confirmed: true`; the
 original turn had failed with `usage_limit_exceeded`. The account's billing screen
-showed a free trial with $0.00 credit remaining. Resolve API billing/limits before
-another live matching attempt; model access and live output quality remain unverified.
+showed a free trial with $0.00 credit remaining. The user subsequently purchased
+credits and the founder check above succeeded; investor-side live validation remains pending.
 Safe diagnostics now include a stage, exception class, recognized provider code,
 HTTP status if available, and application file/line locations. There are no raw
 exception messages, headers, prompts, tool arguments, frame locals, or model output.
@@ -66,7 +98,7 @@ network access or charges. These recovery tests are included in the verified 161
 result above; they do not establish that a live matching run will succeed.
 
 The default model is `gpt-6-astra`, following the current Agents API quickstart.
-Change it with `--model` or `OPENAI_MODEL`; project access must be checked live.
+Change it with `--model` or `OPENAI_MODEL`; access for other models must be checked live.
 The default environment is a small OpenAI-hosted sandbox with network disabled.
 No repository files, credentials, or packages are uploaded to it. Matching functions
 execute in the local backend, not the hosted sandbox. `--environment none` explicitly

@@ -34,7 +34,8 @@ The local tool registry and JSON dispatcher live in `app/tools/`. Each instance 
 bound to a validated request and catalog snapshot; the agent cannot change these through
 tool arguments. Additional search filters apply to every candidate-scoring/evidence path.
 Provider-specific registration and the single-turn Agents API runner are implemented
-in `app/agent/`. Live API access and behavior still need verification. Final rankings
+in `app/agent/`. A founder-side live run has succeeded; investor mode still needs
+live verification. Final rankings
 are rechecked locally; the model selects evidence highlights rather than writing facts.
 See [agent-runtime.md](agent-runtime.md) for limits and lifecycle handling.
 See [agent-tools.md](agent-tools.md) for the exact call and error contracts.

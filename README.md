@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, and the bounded agent runtime are implemented. The local engine-only FastAPI service is implemented; live AI verification is pending API billing, and the user interface remains to be built. See the backend documentation for verification status.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, the bounded agent runtime, and the engine-only FastAPI service are implemented. One founder-side live AI run succeeded. Investor-side live verification, live-agent HTTP integration, and the user interface remain. See the backend documentation for verification status.
 
 ## The problem
 
@@ -133,7 +133,8 @@ cd venturematch-ai
 - [ ] Upgrade the lexical thesis baseline to embedding-based similarity
 - [x] Expose matching functions through local typed tool dispatch
 - [x] Register tools and build the bounded VentureMatch Agent runtime
-- [ ] Verify live OpenAI access and end-to-end tool calls in both modes
+- [x] Verify live OpenAI access and end-to-end founder tool calls
+- [ ] Verify end-to-end investor tool calls and measure live usage/cost
 - [x] Build engine-only FastAPI profile and matching endpoints
 - [ ] Expose verified live agent execution through the API
 - [ ] Build founder and investor interface flows

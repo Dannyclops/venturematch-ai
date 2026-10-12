@@ -18,6 +18,27 @@ from test_tools import catalog, request
 SECRET = "sk-test-private-value-never-echo"
 
 
+def test_async_cli_client_setup_failure_is_redacted(monkeypatch, capsys):
+    from app.agent import __main__ as cli
+
+    monkeypatch.setenv("OPENAI_API_KEY", SECRET)
+    monkeypatch.setattr(cli, "load_dotenv", lambda *args, **kwargs: None)
+
+    def fail_client(**kwargs):
+        raise ImportError(SECRET)
+
+    monkeypatch.setattr(cli, "AsyncOpenAI", fail_client)
+    with pytest.raises(SystemExit) as exc:
+        cli.main(["--business", "business_solargrid_africa", "--live", "--top-k", "1"])
+    assert exc.value.code == 1
+    captured = capsys.readouterr()
+    result = json.loads(captured.out)
+    assert result["error"]["code"] == "client_error"
+    assert result["error"]["diagnostics"]["exception_type"] == "ImportError"
+    assert result["error"]["diagnostics"]["stage"] == "client_setup"
+    assert SECRET not in captured.out + captured.err
+
+
 def api_error(code, status=None):
     req = httpx.Request("POST", "https://api.openai.com/v1/agents/sessions",
                         headers={"Authorization": "Bearer " + SECRET})
