@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, and offline compatibility scoring are implemented and tested. Agent integration, API, and user interface remain to be built.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, and local agent-tool dispatch are implemented and tested. Live agent integration, API, and user interface remain to be built.
 
 ## The problem
 
@@ -129,7 +129,8 @@ cd venturematch-ai
 - [x] Implement deterministic eligibility filters
 - [x] Implement and test the offline compatibility score
 - [ ] Upgrade the lexical thesis baseline to embedding-based similarity
-- [ ] Expose matching functions as agent tools
+- [x] Expose matching functions through local typed tool dispatch
+- [ ] Register tools with the OpenAI agent runtime and verify live tool calls
 - [ ] Build the VentureMatch Agent
 - [ ] Build the FastAPI endpoints
 - [ ] Build founder and investor interface flows
@@ -168,6 +169,9 @@ These exclusions keep the demo focused on explainable discovery and compatibilit
 
 See [compatibility scoring](docs/compatibility-scoring.md) for the versioned scoring
 policy, limitations, and runnable offline demo commands.
+
+See [agent tools](docs/agent-tools.md) for request-bound callable interfaces,
+search-filter semantics, and the local tool harness.
 
 ## License
 

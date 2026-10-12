@@ -46,7 +46,10 @@ class MatchConstraints(SchemaModel):
     def normalize_geographies(cls, values: list[str] | None) -> list[str] | None:
         if values is None:
             return None
-        return list(dict.fromkeys(value.strip().lower() for value in values if value.strip()))
+        normalized = list(dict.fromkeys(value.strip().lower() for value in values if value.strip()))
+        if not normalized:
+            raise ValueError("geographies must include at least one non-blank value")
+        return normalized
 
     @field_validator("excluded_entity_ids")
     @classmethod

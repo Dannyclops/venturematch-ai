@@ -28,6 +28,12 @@ A single agent operates in either founder or investor mode. It determines which 
 
 Thin tool interfaces expose profile analysis, candidate retrieval, scoring, portfolio analysis, and evidence retrieval to the agent.
 
+The local tool registry and JSON dispatcher live in `app/tools/`. Each instance is
+bound to a validated request and catalog snapshot; the agent cannot change these through
+tool arguments. Additional search filters apply to every candidate-scoring/evidence path.
+Provider-specific tool registration and the live agent loop are not yet implemented.
+See [agent-tools.md](agent-tools.md) for the exact call and error contracts.
+
 ### 5. Matching engine
 
 Pure Python functions perform hard filtering, component scoring, weight application, ranking, and confidence calculation. These functions should have unit tests and no dependency on an LLM.

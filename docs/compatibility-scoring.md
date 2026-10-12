@@ -86,9 +86,9 @@ otherwise **medium**. The heuristic version never claims high confidence.
 Confidence concerns evidence completeness, not likelihood of investment.
 
 The rank methods accept candidate exclusions and exploration controls directly.
-They are not yet a `MatchRequest` adapter: additional request-level industry/stage/
-geography/ticket refinements, display-currency formatting, and conversational parsing
-remain work for the search/API/agent integration.
+The separate [tool layer](agent-tools.md) now binds a `MatchRequest` and applies its
+additional industry/stage/geography/ticket filters before invoking the scorer.
+Display-currency formatting and conversational parsing remain future integration work.
 
 ## Run the demo
 

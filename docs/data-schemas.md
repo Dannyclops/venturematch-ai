@@ -63,6 +63,8 @@ This prevents ambiguous tool selection and accidental cross-mode processing.
 - Backend source of truth: `backend/app/models/`
 - Backend contract tests: `backend/tests/test_schemas.py`
 - Frontend mirror: `frontend/src/types/`
+- Backend-local tool inputs/results: `backend/app/tools/contracts.py`; the registry
+  exports their JSON Schemas. These are server-side tool contracts, not frontend endpoints.
 
 See [`currency-and-stage-policy.md`](currency-and-stage-policy.md) for conversion provenance and funding-stage exploration rules.
 
