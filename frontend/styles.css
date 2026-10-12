@@ -15,3 +15,43 @@ input[type=number]:focus{outline:2px solid #91e7c9;outline-offset:2px}
 .clear-locations{border:1px solid #4c6a77;background:#203b4d;color:#a9ebd0;border-radius:7px;font-size:11px;padding:6px 9px;margin-top:10px}
 input[type=password]{display:block;width:100%;background:#0d1e31;border:1px solid #3b5269;border-radius:9px;padding:12px;color:#f2fafb;outline:none}
 input[type=password]:focus{outline:2px solid #91e7c9;outline-offset:2px}
+
+/* Oil UI pass: put the matching task and the agent choice ahead of decoration. */
+input{font:inherit}
+.hero{padding:34px 0 32px}
+.hero h1{font-size:clamp(36px,4.3vw,56px);line-height:1.03;margin:12px 0 13px}
+.hero p{max-width:720px;font-size:15px;line-height:1.5}
+.layout{grid-template-columns:minmax(340px,445px) minmax(0,1fr);gap:20px}
+.controls,.results{padding:24px}
+.controls h2,.results h2{margin-bottom:18px}
+.mode-switch{margin-bottom:19px}
+.mode-switch button{min-height:68px}
+.execution-zone{background:linear-gradient(145deg,#17423f,#12313a 72%);border:1px solid #4b9f82;border-radius:14px;padding:16px 17px 17px;margin-bottom:22px;box-shadow:0 12px 30px #061c2640}
+.execution-heading{display:flex;align-items:center;gap:9px;color:#baf2d9;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.agent-signal{width:9px;height:9px;border-radius:50%;background:#a0f2bf;box-shadow:0 0 0 4px #a0f2bf24,0 0 16px #a0f2bf80}
+.execution-zone label{margin:13px 0 7px}
+.execution-zone select{border-color:#79beaa;background:#0b2b32;font-weight:750}
+.execution-zone .field-note{color:#b9dace}
+#demo-code-field{border-top:1px solid #458471;margin-top:15px;padding-top:2px}
+.advanced-filters{border:0;border-top:1px solid #3b5269;border-bottom:1px solid #3b5269;padding:14px 0;margin-top:20px;background:transparent}
+.advanced-filters>summary{color:#eaf6f2;font-weight:750;font-size:13px;cursor:pointer}
+.advanced-filters>summary span{display:block;margin:5px 0 0 18px;color:#9fb5bf;font-size:11px;font-weight:500}
+.advanced-filters[open]>summary{margin-bottom:14px}
+.advanced-filters label{margin-top:15px}
+.advanced-filters .location-filter{margin-top:16px;background:#142a40}
+.advanced-filters .checkline{margin:19px 0 2px}
+.advanced-filters .checkline input{margin:0}
+.run-button{margin-top:17px;min-height:52px;font-size:15px;box-shadow:0 8px 22px #071b2380}
+.run-button:hover{transform:translateY(-1px)}
+.run-button span{font-size:22px;line-height:18px}
+.results{min-height:560px}
+.results-top{align-items:start}
+.empty-state{min-height:390px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px dashed #365268;border-radius:15px;background:radial-gradient(circle at 50% 40%,#1b3d49 0,#13273b 45%,#112238 80%);padding:28px;margin-top:20px}
+.empty-orbit{display:flex;align-items:center;justify-content:center;gap:12px;width:210px;height:104px;margin-bottom:13px}
+.empty-orbit span{display:grid;place-items:center;width:56px;height:56px;border:1px solid #5c947f;border-radius:50%;color:#9adbbb;font-size:12px;font-weight:800;box-shadow:0 0 0 5px #24564238}
+.empty-orbit span:nth-child(2){transform:translateY(-18px);border-color:#93dabb;background:#204c4b}
+.empty-state strong{font-size:20px;letter-spacing:-.025em;color:#ecf8f3}
+.empty-state p{max-width:325px;color:#a8c0c8;line-height:1.55;font-size:13px;margin:9px auto 0}
+.field-note,.run-notes{font-size:13px}
+summary:focus-visible{outline:2px solid #91e7c9;outline-offset:4px}
+@media(max-width:800px){.hero{padding:30px 0 26px}.layout{grid-template-columns:1fr}.results{min-height:330px}.empty-state{min-height:260px}}

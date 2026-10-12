@@ -16,8 +16,8 @@
     <main>
       <section class="hero">
         <div class="eyebrow">INVESTMENT DISCOVERY, WITH REASONS</div>
-        <h1>Find the right side of<br /><em>the table.</em></h1>
-        <p>Explore founder–investor fit with clear eligibility rules, ranked compatibility, and evidence you can inspect.</p>
+        <h1>Better matches.<br /><em>Clear reasons.</em></h1>
+        <p>Find founder–investor fit with an AI agent grounded in transparent eligibility, scores, and profile evidence.</p>
       </section>
       <div class="layout">
         <section class="panel controls" aria-labelledby="search-heading">
@@ -28,6 +28,17 @@
             <button id="investor-mode" type="button" aria-pressed="false">I'm an investor<span>Find businesses</span></button>
           </div>
           <form id="match-form">
+            <div class="execution-zone">
+              <div class="execution-heading"><span class="agent-signal" aria-hidden="true"></span><span>Choose how to match</span></div>
+              <label for="execution">Matching method</label>
+              <select id="execution"><option value="engine">Free matching engine</option><option value="live" disabled>AI-assisted (unavailable)</option></select>
+              <p id="execution-note" class="field-note">Engine mode does not call OpenAI or spend API credits.</p>
+              <div id="demo-code-field" hidden>
+                <label for="demo-code">Reviewer access code</label>
+                <input id="demo-code" type="password" maxlength="128" autocomplete="off" placeholder="Code from the submission" />
+                <p class="field-note">Judges: find the code beside this link in the submission. For a local run, leave this blank.</p>
+              </div>
+            </div>
             <label for="profile">Demo profile</label>
             <select id="profile" required><option value="">Loading fictional profiles…</option></select>
             <p id="profile-summary" class="field-note"></p>
@@ -53,27 +64,21 @@
             <textarea id="objective" rows="3" maxlength="2000" required>Find investors for SolarGrid Africa that support seed-stage climate technology in African markets.</textarea>
             <p class="field-note">In engine mode, the objective is recorded; structured filters drive ranking.</p>
 
-            <div class="field-pair">
-              <div><label for="industry">Industry filter</label><select id="industry"><option value="">Any industry</option></select></div>
-              <div><label for="stage">Funding stage</label><select id="stage"><option value="">Any stage</option></select></div>
-            </div>
-            <details class="location-filter">
-              <summary>Explore locations <span id="location-count">All locations</span></summary>
-              <button id="clear-locations" class="clear-locations" type="button">All locations (clear filters)</button>
-              <div id="locations" class="location-choices" role="group" aria-label="Explore locations"></div>
-              <p class="field-note">Choose several continents or demo markets to include any of them. Some continents have no fictional profiles yet.</p>
+            <details class="advanced-filters">
+              <summary>Refine the shortlist <span>Industry, stage, location and count</span></summary>
+              <div class="field-pair">
+                <div><label for="industry">Industry filter</label><select id="industry"><option value="">Any industry</option></select></div>
+                <div><label for="stage">Funding stage</label><select id="stage"><option value="">Any stage</option></select></div>
+              </div>
+              <details class="location-filter">
+                <summary>Explore locations <span id="location-count">All locations</span></summary>
+                <button id="clear-locations" class="clear-locations" type="button">All locations (clear filters)</button>
+                <div id="locations" class="location-choices" role="group" aria-label="Explore locations"></div>
+                <p class="field-note">Choose several continents or demo markets to include any of them. Some continents have no fictional profiles yet.</p>
+              </details>
+              <label for="top-k">Number of results</label><select id="top-k"><option>3</option><option>1</option><option>2</option><option>5</option><option>10</option></select>
+              <label class="checkline"><input id="explore" type="checkbox" checked /> Include clearly labelled stage exploration</label>
             </details>
-            <div class="field-pair">
-              <div><label for="top-k">Results</label><select id="top-k"><option>3</option><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
-              <div><label for="execution">Execution</label><select id="execution"><option value="engine">Free matching engine</option><option value="live" disabled>AI-assisted (unavailable)</option></select></div>
-            </div>
-            <div id="demo-code-field" hidden>
-              <label for="demo-code">Reviewer access code for AI-assisted search</label>
-              <input id="demo-code" type="password" maxlength="128" autocomplete="off" placeholder="Code from the submission" />
-              <p class="field-note">Judges: find the access code in the submission beside this demo link. Free matching needs no code.</p>
-            </div>
-            <label class="checkline"><input id="explore" type="checkbox" checked /> Include clearly labelled stage exploration</label>
-            <p id="execution-note" class="field-note">Engine mode does not call OpenAI or spend API credits.</p>
             <button class="run-button" id="submit" type="submit">Find matches <span aria-hidden="true">↗</span></button>
           </form>
           <div id="connection" class="connection" role="status">Connecting to the local API…</div>
@@ -81,7 +86,7 @@
         <section class="results" aria-labelledby="results-heading">
           <div class="results-top"><div><div class="section-kicker">02 / THE MATCHES</div><h2 id="results-heading">The shortlist</h2></div><span id="run-mode" class="run-mode">Awaiting search</span></div>
           <div id="status" class="status" role="status" aria-live="polite">Choose a demo profile and run a search to see ranked matches.</div>
-          <div id="results" class="result-list"></div>
+          <div id="results" class="result-list"><div class="empty-state" aria-hidden="true"><div class="empty-orbit"><span>01</span><span>02</span><span>03</span></div><strong>Your shortlist starts here.</strong><p>Run a search to compare eligibility, compatibility, and the evidence behind each match.</p></div></div>
           <div id="run-notes"></div>
         </section>
       </div>
