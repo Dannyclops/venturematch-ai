@@ -32,6 +32,23 @@
             <select id="profile" required><option value="">Loading fictional profiles…</option></select>
             <p id="profile-summary" class="field-note"></p>
 
+            <fieldset id="founder-money" class="money-edit">
+              <legend>Adjust the raise for this search</legend>
+              <div class="field-pair">
+                <div><label for="raise-amount">Raise amount</label><input id="raise-amount" type="number" min="1" step="1" required /></div>
+                <div><label for="raise-currency">Currency</label><select id="raise-currency" required></select></div>
+              </div>
+            </fieldset>
+            <fieldset id="investor-money" class="money-edit" hidden disabled>
+              <legend>Adjust the ticket for this search</legend>
+              <div class="field-pair">
+                <div><label for="ticket-min">Minimum</label><input id="ticket-min" type="number" min="0" step="1" required /></div>
+                <div><label for="ticket-max">Maximum</label><input id="ticket-max" type="number" min="1" step="1" required /></div>
+              </div>
+              <label for="ticket-currency">Currency</label><select id="ticket-currency" required></select>
+            </fieldset>
+            <p class="field-note">Edits apply to this search only. FX uses the illustrative snapshot shown in the results.</p>
+
             <label for="objective">What are you looking for?</label>
             <textarea id="objective" rows="3" maxlength="2000" required>Find investors for SolarGrid Africa that support seed-stage climate technology in African markets.</textarea>
             <p class="field-note">In engine mode, the objective is recorded; structured filters drive ranking.</p>
@@ -40,6 +57,12 @@
               <div><label for="industry">Industry filter</label><select id="industry"><option value="">Any industry</option></select></div>
               <div><label for="stage">Funding stage</label><select id="stage"><option value="">Any stage</option></select></div>
             </div>
+            <details class="location-filter">
+              <summary>Explore locations <span id="location-count">All locations</span></summary>
+              <button id="clear-locations" class="clear-locations" type="button">All locations (clear filters)</button>
+              <div id="locations" class="location-choices" role="group" aria-label="Explore locations"></div>
+              <p class="field-note">Choose several continents or demo markets to include any of them. Some continents have no fictional profiles yet.</p>
+            </details>
             <div class="field-pair">
               <div><label for="top-k">Results</label><select id="top-k"><option>3</option><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
               <div><label for="execution">Execution</label><select id="execution"><option value="engine">Free matching engine</option><option value="live" disabled>AI-assisted (unavailable)</option></select></div>

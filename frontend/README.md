@@ -45,11 +45,15 @@ virtual environment is missing, follow `backend/README.md` first. Opening
 `index.html` as a `file://` URL is not the supported setup.
 
 The default backend is engine-only and does not use OpenAI credits. The UI loads
-fictional profiles, offers founder and investor modes, industry and stage filters,
-optional stage exploration, and ranked results. The natural-language objective
+fictional profiles, offers founder and investor modes, search-only raise or ticket
+edits, industry and stage filters, multi-location exploration, optional stage
+exploration, and ranked results. Choose several locations to include any of them;
+**All locations** clears that filter. Continents cover the world as options, while
+only fictional demo markets have profiles. The natural-language objective
 is recorded but does not alter scores in engine mode. Each card exposes factor
 scores, source evidence, concerns, and the illustrative FX comparison. There is
-no persistent profile or conversation state.
+no persistent profile or conversation state. Edited amounts and currencies are
+sent with that search request and reset when a different profile is selected.
 
 To offer the **optional billable** AI-assisted choice, restart the backend with
 the environment flag described in [`../docs/live-agent-api.md`](../docs/live-agent-api.md).
@@ -58,6 +62,8 @@ A browser disconnect can leave a paid run active, so inspect the server before
 retrying.
 
 See [`../docs/demo-runbook.md`](../docs/demo-runbook.md) for the presentation flow.
+The engine-only scenario checks are documented in
+[`../docs/demo-evaluation.md`](../docs/demo-evaluation.md).
 
 ## Later UI scope
 

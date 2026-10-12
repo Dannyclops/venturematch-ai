@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. Both engine modes worked in the user's browser, one founder CLI AI run succeeded, and one investor AI-assisted browser run returned a ranked result on 2026-10-12. Individual-run cost remains unknown.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. The demo supports search-only money edits and multiple location filters. Both engine modes worked in the user's browser, one founder CLI AI run succeeded, and one investor AI-assisted browser run returned a ranked result on 2026-10-12. Individual-run cost remains unknown.
 
 ## The problem
 
@@ -141,8 +141,9 @@ cd venturematch-ai
 - [x] Complete a live investor check and paid HTTP browser smoke check
 - [x] Build a local founder and investor demo interface
 - [x] Verify founder and investor engine searches in the user's browser
+- [x] Add search-only money edits and multi-location exploration
 - [ ] Add conversational refinement
-- [ ] Run scenario-based evaluations
+- [x] Run deterministic scenario-based demo evaluations
 - [ ] Deploy and record the hackathon demo
 
 ## MVP boundaries
@@ -190,6 +191,7 @@ See [AI-assisted API](docs/live-agent-api.md) for explicit activation, request h
 execution bounds, safe errors, and remaining live checks.
 
 See [demo runbook](docs/demo-runbook.md) for local launch and a short walkthrough.
+See [demo evaluation](docs/demo-evaluation.md) for repeatable no-credit scenarios.
 
 ## License
 

@@ -27,10 +27,18 @@ ColdChain Solar at 77.06/100 with evidence. Rehearse on the presentation machine
    Ventures. Click **Find matches**. Explain how its thesis, stage policy, ticket,
    and geography restrict and rank fictional businesses. Open a card to show
    why the result appeared.
-3. **Exploration:** Change the stage filter or toggle **Include clearly labelled
-   stage exploration**, then search again. Exploratory candidates are labelled
-   separately from core eligible matches; other hard constraints still apply.
-   If a filter yields zero results, show the empty-state guidance and clear it.
+3. **Exploration:** In investor mode, select **Nigeria** and **Kenya** under
+   **Explore locations**, then search. GreenFront has two matching businesses
+   in this scenario. Use **All locations (clear filters)** to restore the full
+   catalog. Multiple choices mean *any* selected location. A continent groups
+   the mapped demo countries; North America currently returns no demo matches.
+4. **Sensitivity:** With GreenFront selected, change its USD ticket range to
+   250,000–300,000 and search to show zero compatible businesses. Selecting a
+   different profile restores its original ticket. You can similarly edit a
+   founder's raise amount or currency for one search. Change the stage filter
+   or toggle **Include clearly labelled stage exploration** to show how those
+   constraints affect results. Exploratory candidates remain separate from
+   core eligible matches.
 
 ## Honest framing
 
@@ -41,9 +49,14 @@ ColdChain Solar at 77.06/100 with evidence. Rehearse on the presentation machine
   bounded AI run chooses evidence through the matching tools.
 - Thesis similarity is currently keyword-based, not embeddings. There is no
   conversation persistence, live market data, or deployment yet.
+- Location options include all continents, but the catalog covers only its
+  fictional demo markets. The amount and currency fields edit a selected demo
+  profile for one request; they do not save a new profile.
 - One founder CLI AI run and one investor AI-assisted browser result were
   observed. Individual-run token usage and billed cost were not established.
 
 If the browser cannot connect, use `http://127.0.0.1:8000/api/health` to check
 the backend and verify both terminals are still running. The scripted local
 API tests exercise both modes without spending credits.
+The repeatable engine scenarios and observed counts are in
+[`demo-evaluation.md`](demo-evaluation.md).

@@ -41,17 +41,25 @@ COUNTRY_REGIONS = {
     "cote d'ivoire": {"africa", "west africa", "emerging markets"},
     "egypt": {"africa", "mena", "emerging markets"},
     "ghana": {"africa", "west africa", "emerging markets"},
-    "jordan": {"mena", "emerging markets"},
+    "jordan": {"mena", "asia", "emerging markets"},
     "kenya": {"africa", "east africa", "emerging markets"},
     "namibia": {"africa", "southern africa", "emerging markets"},
     "nigeria": {"africa", "west africa", "emerging markets"},
-    "saudi arabia": {"mena", "emerging markets"},
+    "saudi arabia": {"mena", "asia", "emerging markets"},
     "senegal": {"africa", "west africa", "emerging markets"},
     "south africa": {"africa", "southern africa", "emerging markets"},
     "tanzania": {"africa", "east africa", "emerging markets"},
-    "turkiye": {"europe", "southeast europe", "emerging markets"},
+    "turkiye": {"europe", "asia", "southeast europe", "emerging markets"},
     "uganda": {"africa", "east africa", "emerging markets"},
-    "united arab emirates": {"mena", "emerging markets"},
+    "united arab emirates": {"mena", "asia", "emerging markets"},
+}
+
+# Broad mandates can span continents. Used for explicit search filters only;
+# do not add every broad MENA mandate to an individual business's country tags.
+REGION_CONTINENTS = {
+    "west africa": {"africa"}, "east africa": {"africa"},
+    "southern africa": {"africa"}, "southeast europe": {"europe"},
+    "mena": {"africa", "asia"},
 }
 
 

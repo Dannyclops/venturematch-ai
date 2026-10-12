@@ -7,7 +7,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.matching import CompatibilityEngine, EligibilityEngine
-from app.matching.eligibility import COUNTRY_REGIONS, business_geography_tags, normalize_geography
+from app.matching.eligibility import (
+    COUNTRY_REGIONS, REGION_CONTINENTS, business_geography_tags, normalize_geography,
+)
 from app.models import EligibilityStatus, MatchDirection, MatchFactor, MatchRequest, UserMode
 from app.models.common import SchemaModel
 from app.services import CurrencyNormalizer, UnsupportedCurrencyError
@@ -70,8 +72,12 @@ def _geography_overlaps(requested: list[str], investor_geographies: list[str]) -
     right = {normalize_geography(value) for value in investor_geographies}
     if "global" in left or "global" in right:
         return True
-    expanded_left = left | {region for value in left for region in COUNTRY_REGIONS.get(value, ())}
-    expanded_right = right | {region for value in right for region in COUNTRY_REGIONS.get(value, ())}
+    expanded_left = left | {region for value in left for region in COUNTRY_REGIONS.get(value, ())} | {
+        continent for value in left for continent in REGION_CONTINENTS.get(value, ())
+    }
+    expanded_right = right | {region for value in right for region in COUNTRY_REGIONS.get(value, ())} | {
+        continent for value in right for continent in REGION_CONTINENTS.get(value, ())
+    }
     return bool(left & expanded_right or right & expanded_left)
 
 

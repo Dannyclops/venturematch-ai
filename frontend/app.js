@@ -12,6 +12,8 @@ const factors = [
   ["portfolio_compatibility", "Portfolio"],
 ];
 const state = { mode: "founder", profiles: [], liveEnabled: false, loadVersion: 0 };
+const continents = ["africa", "asia", "europe", "north america", "south america", "oceania"];
+const regions = ["west africa", "east africa", "southern africa", "mena", "southeast europe"];
 
 function element(tag, className, content) {
   const node = document.createElement(tag);
@@ -40,6 +42,10 @@ function setStatus(message, isError = false) {
 
 function setMode(mode) {
   state.mode = mode;
+  $("founder-money").hidden = mode !== "founder";
+  $("founder-money").disabled = mode !== "founder";
+  $("investor-money").hidden = mode !== "investor";
+  $("investor-money").disabled = mode !== "investor";
   for (const value of ["founder", "investor"]) {
     const button = $(`${value}-mode`);
     button.classList.toggle("active", mode === value);
@@ -59,8 +65,42 @@ function updateProfileSummary() {
   const profile = state.profiles.find((item) => item.id === $("profile").value);
   if (!profile) { $("profile-summary").textContent = ""; return; }
   $("profile-summary").textContent = state.mode === "founder"
-    ? `${profile.one_liner} · ${labels(profile.funding_stage)} · raising ${Number(profile.amount_raising.amount).toLocaleString()} ${profile.amount_raising.currency}`
+    ? `${profile.one_liner} · ${labels(profile.funding_stage)}`
     : `${profile.thesis} · ${labels(profile.stage_flexibility)} stage policy`;
+  if (state.mode === "founder") {
+    $("raise-amount").value = profile.amount_raising.amount;
+    $("raise-currency").value = profile.amount_raising.currency;
+  } else {
+    $("ticket-min").value = profile.ticket_size.minimum;
+    $("ticket-max").value = profile.ticket_size.maximum;
+    $("ticket-currency").value = profile.ticket_size.currency;
+  }
+}
+
+function selectedLocations() {
+  return [...$("locations").querySelectorAll("input:checked")].map((input) => input.value);
+}
+
+function renderLocations(businesses, investors) {
+  const candidateLocations = [
+    ...businesses.flatMap((profile) => profile.operating_markets),
+    ...investors.flatMap((profile) => profile.preferred_geographies),
+  ];
+  const markets = [...new Set([...regions, ...candidateLocations])]
+    .filter((value) => value !== "global" && !continents.includes(value)).sort();
+  const choice = (value) => {
+    const label = element("label", "location-choice");
+    const input = element("input");
+    input.type = "checkbox";
+    input.value = value;
+    label.append(input, document.createTextNode(value === "mena" ? "MENA" : labels(value)));
+    return label;
+  };
+  $("locations").replaceChildren(
+    element("div", "location-heading", "Continents"), ...continents.map(choice),
+    element("div", "location-heading", "Demo regions and countries"), ...markets.map(choice),
+  );
+  $("location-count").textContent = "All locations";
 }
 
 async function loadProfiles() {
@@ -69,15 +109,21 @@ async function loadProfiles() {
   const select = $("profile");
   select.replaceChildren(new Option("Loading fictional profiles…", ""));
   select.disabled = true;
+  $("locations").replaceChildren();
+  $("location-count").textContent = "All locations";
   try {
-    const page = await getJson(mode === "founder" ? "/api/businesses?limit=50" : "/api/investors?limit=50");
+    const [businesses, investors] = await Promise.all([
+      getJson("/api/businesses?limit=50"), getJson("/api/investors?limit=50"),
+    ]);
     if (version !== state.loadVersion) return;
+    const page = mode === "founder" ? businesses : investors;
     state.profiles = page.items;
     select.replaceChildren(...page.items.map((profile) => new Option(profile.name, profile.id)));
     select.disabled = false;
     const preferred = mode === "founder" ? "business_solargrid_africa" : "investor_greenfront";
     if (page.items.some((profile) => profile.id === preferred)) select.value = preferred;
     updateProfileSummary();
+    renderLocations(businesses.items, investors.items);
   } catch (error) {
     if (version !== state.loadVersion) return;
     select.replaceChildren(new Option("API unavailable", ""));
@@ -96,6 +142,19 @@ async function initialize() {
   $("founder-mode").addEventListener("click", () => setMode("founder"));
   $("investor-mode").addEventListener("click", () => setMode("investor"));
   $("profile").addEventListener("change", updateProfileSummary);
+  $("locations").addEventListener("change", (event) => {
+    const count = selectedLocations().length;
+    if (count > 20) {
+      event.target.checked = false;
+      setStatus("Choose at most 20 locations.", true);
+      return;
+    }
+    $("location-count").textContent = count ? `${count} selected` : "All locations";
+  });
+  $("clear-locations").addEventListener("click", () => {
+    for (const input of $("locations").querySelectorAll("input:checked")) input.checked = false;
+    $("location-count").textContent = "All locations";
+  });
   $("execution").addEventListener("change", () => {
     $("execution-note").textContent = $("execution").value === "live"
       ? "AI-assisted mode makes a billable OpenAI request. You will confirm before each run."
@@ -107,6 +166,8 @@ async function initialize() {
     state.liveEnabled = health.live_agent_enabled;
     populateOptions("industry", metadata.industries);
     populateOptions("stage", metadata.funding_stages);
+    populateOptions("raise-currency", metadata.currencies);
+    populateOptions("ticket-currency", metadata.currencies);
     if (state.liveEnabled) {
       const option = $("execution").options[1];
       option.disabled = false;
@@ -126,17 +187,32 @@ async function runMatch(event) {
   event.preventDefault();
   const profile = state.profiles.find((item) => item.id === $("profile").value);
   if (!profile) { setStatus("Choose a demo profile first.", true); return; }
+  const edited = structuredClone(profile);
+  if (state.mode === "founder") {
+    const amount = Number($("raise-amount").value);
+    if (!Number.isSafeInteger(amount) || amount <= 0) { setStatus("Enter a positive whole-number raise amount.", true); return; }
+    edited.amount_raising = { amount, currency: $("raise-currency").value };
+  } else {
+    const minimum = Number($("ticket-min").value);
+    const maximum = Number($("ticket-max").value);
+    if (!Number.isSafeInteger(minimum) || !Number.isSafeInteger(maximum) || minimum < 0 || maximum < Math.max(1, minimum)) {
+      setStatus("Enter a whole-number ticket range with maximum at least the minimum and above zero.", true);
+      return;
+    }
+    edited.ticket_size = { minimum, maximum, currency: $("ticket-currency").value };
+  }
   const live = $("execution").value === "live";
   if (live && !window.confirm("This starts one billable OpenAI run. The exact cost is not shown here. Continue?")) return;
+  const geographies = selectedLocations();
   const request = {
     mode: state.mode,
     objective: $("objective").value.trim(),
-    business_profile: state.mode === "founder" ? profile : null,
-    investor_profile: state.mode === "investor" ? profile : null,
+    business_profile: state.mode === "founder" ? edited : null,
+    investor_profile: state.mode === "investor" ? edited : null,
     constraints: {
       industries: $("industry").value ? [$("industry").value] : null,
       stages: $("stage").value ? [$("stage").value] : null,
-      geographies: null,
+      geographies: geographies.length ? geographies : null,
       ticket_size: null,
       excluded_entity_ids: [],
       include_exploration_matches: $("explore").checked,
