@@ -287,9 +287,14 @@ function renderCard(match, highlight) {
   const score = element("div", "score", Number(match.overall_score).toFixed(1));
   score.append(element("small", "", " / 100"));
   head.append(identity, score);
-  card.append(head, element("p", "explanation", match.explanation));
+  const signals = element("div", "signal-row");
+  const strongest = factors.map(([key, name]) => [name, Number(match.score_breakdown[key])])
+    .sort((left, right) => right[1] - left[1]).slice(0, 3);
+  for (const [name, value] of strongest) signals.append(element("span", "signal", `${name} ${value.toFixed(0)}`));
+  card.append(head, element("div", "signals-heading", "Top score factors"), signals);
   const details = element("details");
   details.append(element("summary", "", "See score breakdown and evidence"));
+  details.append(element("p", "explanation", match.explanation));
   const breakdown = element("div", "factor-list");
   for (const [key, name] of factors) {
     const value = Number(match.score_breakdown[key]);
