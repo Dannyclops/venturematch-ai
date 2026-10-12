@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, the bounded agent runtime, and both engine-only and explicitly enabled AI-assisted HTTP matching are implemented. One founder-side live AI run succeeded. Investor-side live verification and the user interface remain. See the backend documentation for verification status.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. One founder-side live AI run succeeded. Investor-side live verification and browser smoke checks remain open.
 
 ## The problem
 
@@ -43,7 +43,7 @@ The intended workflow is:
 
 ```mermaid
 flowchart TD
-    U[Founder or investor] --> W[Next.js interface]
+    U[Founder or investor] --> W[Browser demo]
     W --> A[VentureMatch Agent]
     A --> T[Matching tools]
     T --> E[Scoring engine]
@@ -96,7 +96,7 @@ venturematch-ai/
 
 | Layer | Planned technology |
 |---|---|
-| Frontend | Next.js, TypeScript, Tailwind CSS |
+| Frontend | Local browser demo; Next.js is a later option |
 | Backend | Python, FastAPI, Pydantic |
 | Agent layer | OpenAI tool calling with structured outputs |
 | Matching | Deterministic filters, weighted scoring, and embeddings |
@@ -106,7 +106,7 @@ venturematch-ai/
 ## Local configuration
 
 The backend supports a local engine-only HTTP API, tests, and offline matching demos
-(see `backend/README.md`). The web interface is not yet built. OpenAI credentials are
+(see `backend/README.md`). The browser demo runs locally (see `frontend/README.md`). OpenAI credentials are
 required only for explicit live agent runs; engine-only matching works without them.
 To configure the project:
 
@@ -138,7 +138,8 @@ cd venturematch-ai
 - [x] Build engine-only FastAPI profile and matching endpoints
 - [x] Add an explicitly enabled AI-assisted API adapter with local integration tests
 - [ ] Complete a live investor check and paid HTTP smoke check
-- [ ] Build founder and investor interface flows
+- [x] Build a local founder and investor demo interface
+- [ ] Verify browser-to-backend flow on the presentation machine
 - [ ] Add conversational refinement
 - [ ] Run scenario-based evaluations
 - [ ] Deploy and record the hackathon demo
@@ -186,6 +187,8 @@ matching, HTTP contracts, and verification status.
 
 See [AI-assisted API](docs/live-agent-api.md) for explicit activation, request headers,
 execution bounds, safe errors, and remaining live checks.
+
+See [demo runbook](docs/demo-runbook.md) for local launch and a short walkthrough.
 
 ## License
 

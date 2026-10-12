@@ -116,9 +116,9 @@ On 2026-10-12 the complete suite passed: **204 tests passed in 9.97 seconds**.
 This verifies local behavior with scripted provider responses, not live investor
 access or the cost of a real HTTP invocation.
 
-The earlier founder CLI live check succeeded. On 2026-10-12 an attempted investor
-CLI check could not be verified: automatic approval review rejected execution/result
-collection because it attempted an additional Visual Studio telemetry destination
-outside the authorized OpenAI call. No result or session ID was received, so outcome
-and cost remain unknown. That execution path was not retried, and no additional
-paid HTTP test was launched. Check the existing run's state before any live retry.
+The earlier founder CLI live check succeeded. On 2026-10-12 investor CLI attempts
+could not be verified: automatic approval review rejected result collection because
+it attempted an additional Visual Studio telemetry destination outside the OpenAI
+call. The result of the later bounded attempt was also unavailable. Outcome and
+individual-run cost remain unknown. No paid HTTP test was launched. Inspect
+account usage and any remaining session state before another live retry.

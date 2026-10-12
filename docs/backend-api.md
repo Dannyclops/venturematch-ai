@@ -19,7 +19,8 @@ From `backend/` in normal PowerShell:
 Open `http://127.0.0.1:8000/docs` for the interactive API documentation, or
 `http://127.0.0.1:8000/api/health` for a health check. Stop the server with Ctrl+C.
 Swagger UI assets load from a CDN; the endpoints and `/openapi.json` themselves
-work offline. No frontend has been built yet.
+work offline. The local browser demo is described in
+[`../frontend/README.md`](../frontend/README.md).
 
 The catalog loads and validates once at application creation. Invalid/missing
 dataset files prevent startup. Restart after editing the demo JSON. The editable
@@ -110,10 +111,12 @@ On 2026-10-12 the complete suite passed in this development session:
 tests and all 18 new API contract tests. `pip check` reported no broken requirements.
 Installed HTTP packages: FastAPI 0.143.0, Starlette 1.7.0, Uvicorn 0.54.0, HTTPX 0.28.1.
 
-Uvicorn successfully reported application startup on `127.0.0.1:8000`. A separate
-PowerShell loopback request timed out in the restricted environment, so the live
-socket/browser smoke check remains unverified. The temporary server was stopped;
-use the normal-terminal startup command above to inspect the API on your laptop.
+Uvicorn successfully reported application startup on `127.0.0.1:8000`. On
+2026-10-12, a separate loopback check received a healthy API response and HTTP 200
+for the browser demo page and script. Headless browser rendering did not return
+usable output in this environment, so interaction in a real browser remains
+unverified. Temporary servers were stopped; use the normal-terminal startup
+commands in the frontend README to inspect the interface on your laptop.
 The passing ASGI tests exercise routing, validation, serialization and responses
 in process; they do not establish browser-to-server connectivity.
 

@@ -1,8 +1,45 @@
 # VentureMatch AI Frontend
 
-This directory will contain the Next.js and TypeScript user interface.
+This directory contains a dependency-free HTML/CSS/JavaScript browser demo.
+The TypeScript contracts in `src/types/` remain a reference for a later app.
+There is no Node install or frontend build step.
 
-## MVP screens
+## Start locally (Windows PowerShell)
+
+Open two terminals in the repository root. In terminal 1:
+
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+In terminal 2, from the repository root:
+
+```powershell
+cd frontend
+..\backend\.venv\Scripts\python.exe -m http.server 3000 --bind 127.0.0.1
+```
+
+Open <http://127.0.0.1:3000/>. Stop each server with Ctrl+C. If the backend
+virtual environment is missing, follow `backend/README.md` first. Opening
+`index.html` as a `file://` URL is not the supported setup.
+
+The default backend is engine-only and does not use OpenAI credits. The UI loads
+fictional profiles, offers founder and investor modes, industry and stage filters,
+optional stage exploration, and ranked results. The natural-language objective
+is recorded but does not alter scores in engine mode. Each card exposes factor
+scores, source evidence, concerns, and the illustrative FX comparison. There is
+no persistent profile or conversation state.
+
+To offer the **optional billable** AI-assisted choice, restart the backend with
+the environment flag described in [`../docs/live-agent-api.md`](../docs/live-agent-api.md).
+The UI never selects it by default and asks for confirmation before each request.
+A browser disconnect can leave a paid run active, so inspect the server before
+retrying.
+
+See [`../docs/demo-runbook.md`](../docs/demo-runbook.md) for the presentation flow.
+
+## Later UI scope
 
 1. Landing page and product explanation
 2. Founder/investor mode selection
@@ -13,9 +50,9 @@ This directory will contain the Next.js and TypeScript user interface.
 7. Score breakdown and evidence panel
 8. Conversational refinement
 
-The frontend will consume the FastAPI service documented in [`../docs/architecture.md`](../docs/architecture.md).
+The demo consumes the FastAPI service documented in [`../docs/architecture.md`](../docs/architecture.md).
 
 ## Current structure
 
-`src/types/` mirrors the backend's Pydantic contracts. The backend remains the source of truth; these interfaces describe its JSON request and response shapes for the UI.
+`src/types/` mirrors the backend's Pydantic contracts. The backend remains the source of truth; these interfaces describe its JSON request and response shapes for future typed UI work.
 
