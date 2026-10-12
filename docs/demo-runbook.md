@@ -2,8 +2,9 @@
 
 ## Before presenting
 
-1. Start the backend and browser demo using `frontend/README.md` in two VS Code
-   terminals (`Terminal` → `New Terminal`). Use `http://127.0.0.1:3000/`.
+1. Open the repository folder in VS Code. In one terminal (`Terminal` →
+   `New Terminal`), run `backend\.venv\Scripts\python.exe scripts\run_demo.py`.
+   The launcher opens `http://127.0.0.1:3000/`; leave the terminal open.
 2. Check that the search panel says **Local API connected**.
 3. Leave execution on **Free matching engine** for a predictable, no-cost demo.
    If the backend was intentionally started with the live flag, the AI option

@@ -6,7 +6,15 @@ There is no Node install or frontend build step.
 
 ## Start locally (Windows PowerShell)
 
-Open two terminals in the repository root. In terminal 1:
+From the repository root, one terminal is enough:
+
+```powershell
+backend\.venv\Scripts\python.exe scripts\run_demo.py
+```
+
+The launcher starts the engine-only backend and frontend, opens the browser,
+and stays running until Ctrl+C. If either service is already healthy, it reuses
+it. For separate terminals instead, in terminal 1:
 
 ```powershell
 cd backend
