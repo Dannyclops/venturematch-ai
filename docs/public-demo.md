@@ -24,6 +24,13 @@ access code. Never place the OpenAI key in the repository, browser, or submissio
    judge note, put the code there. A code in a public submission is public too;
    rotate it after judging. Never submit the OpenAI API key.
 
+Suggested submission wording (replace both placeholders after deployment):
+
+> Live demo: `https://YOUR-ACTUAL-SERVICE.onrender.com/`
+>
+> To try the AI agent, choose **AI-assisted (uses credits)** and enter reviewer
+> access code: `YOUR-TEMPORARY-CODE`. The page points back to this note.
+
 The first request to a free Render web service after inactivity can take time
 because it spins down after 15 minutes. Reopen the link shortly before judging.
 The fictional catalog and FX snapshot are bundled with the repository; there
