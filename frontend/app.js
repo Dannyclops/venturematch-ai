@@ -234,6 +234,7 @@ async function runMatch(event) {
   $("run-mode").textContent = live ? "AI run in progress" : "Engine run in progress";
   setStatus(live ? "The agent is working. Please wait; do not resubmit this request." : "Checking eligibility and ranking candidates…");
   try {
+    document.getElementById("results-heading").scrollIntoView({ behavior: "smooth", block: "start" });
     const result = await getJson(live ? "/api/agent/match" : "/api/matches", {
       method: "POST",
       headers: { "Content-Type": "application/json", ...(live ? {

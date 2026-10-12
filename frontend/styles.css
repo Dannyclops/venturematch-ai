@@ -53,5 +53,8 @@ input{font:inherit}
 .empty-state strong{font-size:20px;letter-spacing:-.025em;color:#ecf8f3}
 .empty-state p{max-width:325px;color:#a8c0c8;line-height:1.55;font-size:13px;margin:9px auto 0}
 .field-note,.run-notes{font-size:13px}
+.connection,footer{font-size:13px;line-height:1.55}
+footer{max-width:760px;margin:0 auto}
+.results p{line-height:1.55}
 summary:focus-visible{outline:2px solid #91e7c9;outline-offset:4px}
 @media(max-width:800px){.hero{padding:30px 0 26px}.layout{grid-template-columns:1fr}.results{min-height:330px}.empty-state{min-height:260px}}
