@@ -123,7 +123,7 @@ cd venturematch-ai
 - [x] Define the agentic architecture
 - [x] Create the repository structure
 - [x] Define Pydantic and TypeScript schemas
-- [ ] Generate synthetic business and investor datasets
+- [x] Generate synthetic business and investor datasets
 - [ ] Implement deterministic eligibility filters
 - [ ] Implement and test the compatibility score
 - [ ] Expose matching functions as agent tools

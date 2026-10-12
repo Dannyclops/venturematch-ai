@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "synthetic": true,
+  "purpose": "Hackathon development, matching-engine tests, and product demonstrations.",
+  "counts": {
+    "businesses": 24,
+    "investors": 15,
+    "portfolio_companies": 45
+  },
+  "files": {
+    "businesses": "businesses.json",
+    "investors": "investors.json",
+    "portfolio_companies": "portfolios.json"
+  },
+  "notice": "Every named entity and metric in these files is fictional and must not be presented as a real investment opportunity or investor profile."
+}

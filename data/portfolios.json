@@ -1,0 +1,452 @@
+[
+  {
+    "id": "portfolio_sunvault",
+    "name": "SunVault Systems",
+    "one_liner": "Battery monitoring for commercial solar installations.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["solar storage", "battery analytics", "commercial energy"]
+  },
+  {
+    "id": "portfolio_aquasense",
+    "name": "AquaSense Africa",
+    "one_liner": "Water-loss monitoring for municipal distribution networks.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "ZA", "city": "Cape Town", "region": "Western Cape"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b",
+    "keywords": ["water resilience", "utility monitoring", "infrastructure"]
+  },
+  {
+    "id": "portfolio_gridwatch",
+    "name": "GridWatch West Africa",
+    "one_liner": "Remote performance monitoring for distributed energy assets.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "GH", "city": "Accra", "region": "Greater Accra"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "saas",
+    "keywords": ["distributed energy", "asset monitoring", "solar operations"]
+  },
+  {
+    "id": "portfolio_ledgerlane",
+    "name": "LedgerLane",
+    "one_liner": "Cash-flow management for Turkish wholesale businesses.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "TR", "city": "Istanbul", "region": "Marmara"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "saas",
+    "keywords": ["cash flow", "wholesale finance", "smb"]
+  },
+  {
+    "id": "portfolio_factorycloud",
+    "name": "FactoryCloud",
+    "one_liner": "Production planning software for small manufacturers.",
+    "primary_industry": "enterprise_software",
+    "headquarters": {"country_code": "TR", "city": "Bursa", "region": "Marmara"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["manufacturing software", "production planning", "operations"]
+  },
+  {
+    "id": "portfolio_exportflow",
+    "name": "ExportFlow",
+    "one_liner": "Trade-document automation for regional exporters.",
+    "primary_industry": "enterprise_software",
+    "headquarters": {"country_code": "TR", "city": "Izmir", "region": "Aegean"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b",
+    "keywords": ["trade documentation", "export operations", "compliance"]
+  },
+  {
+    "id": "portfolio_cropguard",
+    "name": "CropGuard Senegal",
+    "one_liner": "Mobile pest alerts for farmer cooperatives.",
+    "primary_industry": "agritech",
+    "headquarters": {"country_code": "SN", "city": "Dakar", "region": "Dakar"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2b2c",
+    "keywords": ["crop protection", "farmer alerts", "cooperatives"]
+  },
+  {
+    "id": "portfolio_savannacool",
+    "name": "SavannaCool",
+    "one_liner": "Efficient cold rooms for produce aggregation centers.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "NG", "city": "Kano", "region": "Kano"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b",
+    "keywords": ["cold chain", "food storage", "energy efficiency"]
+  },
+  {
+    "id": "portfolio_soilcircle",
+    "name": "SoilCircle",
+    "one_liner": "Soil-health testing for West African farming groups.",
+    "primary_industry": "agritech",
+    "headquarters": {"country_code": "GH", "city": "Tamale", "region": "Northern"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2b",
+    "keywords": ["soil health", "farm analytics", "smallholder farming"]
+  },
+  {
+    "id": "portfolio_maternova",
+    "name": "MaterNova Clinics",
+    "one_liner": "Connected maternal-care tools for community clinics.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "b2b",
+    "keywords": ["maternal health", "community clinics", "care coordination"]
+  },
+  {
+    "id": "portfolio_diagnosticbridge",
+    "name": "DiagnosticBridge",
+    "one_liner": "Remote pathology collaboration for regional hospitals.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "ZA", "city": "Johannesburg", "region": "Gauteng"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["diagnostics", "pathology", "hospital workflow"]
+  },
+  {
+    "id": "portfolio_pharmalink",
+    "name": "PharmaLink MENA",
+    "one_liner": "Medicine procurement software for independent pharmacies.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "EG", "city": "Cairo", "region": "Cairo Governorate"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "marketplace",
+    "keywords": ["pharmacy", "medicine supply", "procurement"]
+  },
+  {
+    "id": "portfolio_tutorpath",
+    "name": "TutorPath",
+    "one_liner": "Adaptive literacy practice for primary-school learners.",
+    "primary_industry": "edtech",
+    "headquarters": {"country_code": "NG", "city": "Lagos", "region": "Lagos"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2c",
+    "keywords": ["adaptive learning", "literacy", "primary education"]
+  },
+  {
+    "id": "portfolio_skillbadge",
+    "name": "SkillBadge",
+    "one_liner": "Verified practical assessments for entry-level talent.",
+    "primary_industry": "edtech",
+    "headquarters": {"country_code": "TR", "city": "Ankara", "region": "Central Anatolia"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b2c",
+    "keywords": ["skills assessment", "employability", "credentials"]
+  },
+  {
+    "id": "portfolio_classpulse",
+    "name": "ClassPulse",
+    "one_liner": "Learning analytics for affordable private schools.",
+    "primary_industry": "edtech",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["school analytics", "student outcomes", "teacher dashboard"]
+  },
+  {
+    "id": "portfolio_remitroute",
+    "name": "RemitRoute",
+    "one_liner": "Payment routing infrastructure for African remittance operators.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "GB", "city": "London", "region": "England"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "b2b",
+    "keywords": ["remittances", "payment infrastructure", "cross-border"]
+  },
+  {
+    "id": "portfolio_creditmesh",
+    "name": "CreditMesh",
+    "one_liner": "Lending infrastructure for cooperative financial institutions.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "GH", "city": "Accra", "region": "Greater Accra"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["credit infrastructure", "cooperative finance", "underwriting"]
+  },
+  {
+    "id": "portfolio_insurelite",
+    "name": "InsureLite",
+    "one_liner": "Embedded microinsurance for digital merchant platforms.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b2c",
+    "keywords": ["embedded insurance", "merchant platforms", "risk products"]
+  },
+  {
+    "id": "portfolio_compliancehub",
+    "name": "ComplianceHub",
+    "one_liner": "Regulatory workflow software for European fintech teams.",
+    "primary_industry": "enterprise_software",
+    "headquarters": {"country_code": "DE", "city": "Berlin", "region": "Berlin"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["regtech", "compliance workflow", "fintech operations"]
+  },
+  {
+    "id": "portfolio_datavault",
+    "name": "DataVault Europe",
+    "one_liner": "Sensitive-data discovery for mid-market companies.",
+    "primary_industry": "cybersecurity",
+    "headquarters": {"country_code": "NL", "city": "Amsterdam", "region": "North Holland"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["data security", "privacy", "sensitive data"]
+  },
+  {
+    "id": "portfolio_opsboard",
+    "name": "OpsBoard",
+    "one_liner": "Operational planning for distributed service teams.",
+    "primary_industry": "enterprise_software",
+    "headquarters": {"country_code": "TR", "city": "Istanbul", "region": "Marmara"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["workforce operations", "planning", "service teams"]
+  },
+  {
+    "id": "portfolio_fleetnest",
+    "name": "FleetNest",
+    "one_liner": "Fleet maintenance coordination for delivery companies.",
+    "primary_industry": "logistics_mobility",
+    "headquarters": {"country_code": "AE", "city": "Dubai", "region": "Dubai"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["fleet maintenance", "delivery operations", "vehicle uptime"]
+  },
+  {
+    "id": "portfolio_cargolink",
+    "name": "CargoLink East Africa",
+    "one_liner": "Shared freight capacity for regional manufacturers.",
+    "primary_industry": "logistics_mobility",
+    "headquarters": {"country_code": "KE", "city": "Mombasa", "region": "Mombasa County"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "marketplace",
+    "keywords": ["freight marketplace", "regional trade", "cargo"]
+  },
+  {
+    "id": "portfolio_evroute",
+    "name": "EVRoute MENA",
+    "one_liner": "Charging and route planning for electric delivery fleets.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "AE", "city": "Abu Dhabi", "region": "Abu Dhabi"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b",
+    "keywords": ["electric fleets", "charging optimization", "route planning"]
+  },
+  {
+    "id": "portfolio_shopstack",
+    "name": "ShopStack MENA",
+    "one_liner": "Storefront infrastructure for social-commerce sellers.",
+    "primary_industry": "e_commerce",
+    "headquarters": {"country_code": "EG", "city": "Cairo", "region": "Cairo Governorate"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["storefront", "social commerce", "seller tools"]
+  },
+  {
+    "id": "portfolio_returnly_mena",
+    "name": "Returnly MENA",
+    "one_liner": "Returns-management software for regional online retailers.",
+    "primary_industry": "e_commerce",
+    "headquarters": {"country_code": "AE", "city": "Dubai", "region": "Dubai"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["ecommerce returns", "reverse logistics", "retail operations"]
+  },
+  {
+    "id": "portfolio_brandcart",
+    "name": "BrandCart",
+    "one_liner": "Regional marketplace for independent consumer brands.",
+    "primary_industry": "consumer",
+    "headquarters": {"country_code": "TR", "city": "Istanbul", "region": "Marmara"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "marketplace",
+    "keywords": ["consumer brands", "marketplace", "regional commerce"]
+  },
+  {
+    "id": "portfolio_learnloop",
+    "name": "LearnLoop Africa",
+    "one_liner": "Mobile revision tools for secondary-school examinations.",
+    "primary_industry": "edtech",
+    "headquarters": {"country_code": "GH", "city": "Accra", "region": "Greater Accra"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2c",
+    "keywords": ["exam revision", "mobile learning", "secondary education"]
+  },
+  {
+    "id": "portfolio_micromed",
+    "name": "MicroMed Access",
+    "one_liner": "Digital triage and referrals for community pharmacies.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "NG", "city": "Abuja", "region": "Federal Capital Territory"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2b2c",
+    "keywords": ["triage", "community pharmacy", "care access"]
+  },
+  {
+    "id": "portfolio_cashnote",
+    "name": "CashNote",
+    "one_liner": "Simple bookkeeping for informal microbusiness owners.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "b2c",
+    "keywords": ["bookkeeping", "microbusiness", "financial inclusion"]
+  },
+  {
+    "id": "portfolio_windmetric",
+    "name": "WindMetric",
+    "one_liner": "Performance analytics for utility-scale wind farms.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "DE", "city": "Hamburg", "region": "Hamburg"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["wind energy", "asset analytics", "renewable operations"]
+  },
+  {
+    "id": "portfolio_renewgrid",
+    "name": "RenewGrid",
+    "one_liner": "Grid-integration software for renewable power developers.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "ZA", "city": "Cape Town", "region": "Western Cape"},
+    "funding_stage_at_investment": "series_b",
+    "business_model": "b2b",
+    "keywords": ["renewable grid", "power systems", "energy infrastructure"]
+  },
+  {
+    "id": "portfolio_emissionworks",
+    "name": "EmissionWorks",
+    "one_liner": "Industrial emissions intelligence for global manufacturers.",
+    "primary_industry": "climate_tech",
+    "headquarters": {"country_code": "GB", "city": "London", "region": "England"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["carbon accounting", "industrial emissions", "supplier reporting"]
+  },
+  {
+    "id": "portfolio_authspring",
+    "name": "AuthSpring",
+    "one_liner": "Passwordless authentication for enterprise applications.",
+    "primary_industry": "cybersecurity",
+    "headquarters": {"country_code": "US", "city": "Boston", "region": "Massachusetts"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["authentication", "identity security", "passwordless"]
+  },
+  {
+    "id": "portfolio_threatlens",
+    "name": "ThreatLens",
+    "one_liner": "Threat prioritization for lean security operations teams.",
+    "primary_industry": "cybersecurity",
+    "headquarters": {"country_code": "GB", "city": "Manchester", "region": "England"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["threat intelligence", "security operations", "alert prioritization"]
+  },
+  {
+    "id": "portfolio_securenode",
+    "name": "SecureNode Africa",
+    "one_liner": "Managed endpoint protection for growing African companies.",
+    "primary_industry": "cybersecurity",
+    "headquarters": {"country_code": "ZA", "city": "Johannesburg", "region": "Gauteng"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "b2b",
+    "keywords": ["endpoint security", "managed security", "mid-market"]
+  },
+  {
+    "id": "portfolio_clinicdesk",
+    "name": "ClinicDesk Türkiye",
+    "one_liner": "Scheduling and billing for independent medical practices.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "TR", "city": "Istanbul", "region": "Marmara"},
+    "funding_stage_at_investment": "pre_seed",
+    "business_model": "saas",
+    "keywords": ["clinic management", "medical billing", "practice software"]
+  },
+  {
+    "id": "portfolio_shiftworks",
+    "name": "ShiftWorks",
+    "one_liner": "Shift planning for hospitality and retail employers.",
+    "primary_industry": "enterprise_software",
+    "headquarters": {"country_code": "TR", "city": "Antalya", "region": "Mediterranean"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["workforce scheduling", "hospitality", "retail operations"]
+  },
+  {
+    "id": "portfolio_dispatchtr",
+    "name": "DispatchTR",
+    "one_liner": "Urban dispatch software for local delivery fleets.",
+    "primary_industry": "logistics_mobility",
+    "headquarters": {"country_code": "TR", "city": "Istanbul", "region": "Marmara"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "saas",
+    "keywords": ["dispatch", "last mile", "fleet software"]
+  },
+  {
+    "id": "portfolio_freshbasket",
+    "name": "FreshBasket ZA",
+    "one_liner": "Affordable fresh-produce subscriptions for urban households.",
+    "primary_industry": "consumer",
+    "headquarters": {"country_code": "ZA", "city": "Johannesburg", "region": "Gauteng"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "d2c",
+    "keywords": ["fresh food", "subscription", "urban households"]
+  },
+  {
+    "id": "portfolio_ruralcart",
+    "name": "RuralCart Kenya",
+    "one_liner": "Commerce and pickup points for underserved rural towns.",
+    "primary_industry": "e_commerce",
+    "headquarters": {"country_code": "KE", "city": "Eldoret", "region": "Uasin Gishu"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "marketplace",
+    "keywords": ["rural commerce", "pickup network", "consumer access"]
+  },
+  {
+    "id": "portfolio_harvesthub",
+    "name": "HarvestHub",
+    "one_liner": "Buyer aggregation for small horticultural farms.",
+    "primary_industry": "agritech",
+    "headquarters": {"country_code": "TZ", "city": "Arusha", "region": "Arusha"},
+    "funding_stage_at_investment": "seed",
+    "business_model": "marketplace",
+    "keywords": ["farm marketplace", "buyer aggregation", "horticulture"]
+  },
+  {
+    "id": "portfolio_tradeaxis",
+    "name": "TradeAxis",
+    "one_liner": "Cross-border settlement infrastructure for regional businesses.",
+    "primary_industry": "fintech",
+    "headquarters": {"country_code": "AE", "city": "Dubai", "region": "Dubai"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "b2b",
+    "keywords": ["cross-border payments", "settlement", "regional trade"]
+  },
+  {
+    "id": "portfolio_healthsignal",
+    "name": "HealthSignal",
+    "one_liner": "Operational intelligence for multi-site hospital groups.",
+    "primary_industry": "healthtech",
+    "headquarters": {"country_code": "EG", "city": "Cairo", "region": "Cairo Governorate"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["hospital operations", "health analytics", "clinical capacity"]
+  },
+  {
+    "id": "portfolio_mobilityos",
+    "name": "MobilityOS Africa",
+    "one_liner": "Operating software for regional transport networks.",
+    "primary_industry": "logistics_mobility",
+    "headquarters": {"country_code": "KE", "city": "Nairobi", "region": "Nairobi County"},
+    "funding_stage_at_investment": "series_a",
+    "business_model": "saas",
+    "keywords": ["transport operations", "mobility network", "regional scale"]
+  }
+]
