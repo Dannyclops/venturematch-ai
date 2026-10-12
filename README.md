@@ -195,6 +195,8 @@ See [demo evaluation](docs/demo-evaluation.md) for repeatable no-credit scenario
 See [public demo deployment](docs/public-demo.md) for the hosted link and
 reviewer access-code setup.
 
+[Deploy the public demo on Render](https://render.com/deploy?repo=https://github.com/Dannyclops/venturematch-ai)
+
 ## License
 
 No open-source license has been selected yet. Until one is added, the repository's contents remain under the copyright of their respective authors.
