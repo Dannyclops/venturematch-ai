@@ -1,5 +1,8 @@
 # Local hackathon demo
 
+Both engine-only search directions were reported working in the user's browser
+on 2026-10-12. Rehearse on the actual presentation machine before showing it.
+
 ## Before presenting
 
 1. Open the repository folder in VS Code. In one terminal (`Terminal` →

@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. One founder-side live AI run succeeded. Investor-side live verification and browser smoke checks remain open.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, scoring, agent tools, a bounded agent runtime, engine-only and optional AI-assisted HTTP matching, and a local two-mode browser demo are implemented. The user reported successful founder and investor searches in the browser on 2026-10-12. One founder-side live AI run succeeded. Investor-side live AI and paid HTTP checks remain unverified.
 
 ## The problem
 
@@ -139,7 +139,7 @@ cd venturematch-ai
 - [x] Add an explicitly enabled AI-assisted API adapter with local integration tests
 - [ ] Complete a live investor check and paid HTTP smoke check
 - [x] Build a local founder and investor demo interface
-- [ ] Verify browser-to-backend flow on the presentation machine
+- [x] Verify founder and investor engine searches in the user's browser
 - [ ] Add conversational refinement
 - [ ] Run scenario-based evaluations
 - [ ] Deploy and record the hackathon demo

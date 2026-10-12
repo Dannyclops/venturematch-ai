@@ -114,9 +114,9 @@ Installed HTTP packages: FastAPI 0.143.0, Starlette 1.7.0, Uvicorn 0.54.0, HTTPX
 Uvicorn successfully reported application startup on `127.0.0.1:8000`. On
 2026-10-12, a separate loopback check received a healthy API response and HTTP 200
 for the browser demo page and script. Headless browser rendering did not return
-usable output in this environment, so interaction in a real browser remains
-unverified. Temporary servers were stopped; use the normal-terminal startup
-commands in the frontend README to inspect the interface on your laptop.
+usable output in this environment. The user then reported that both founder
+and investor searches worked in their browser on 2026-10-12. Temporary test
+servers were stopped; use the frontend README's one-command launcher.
 The passing ASGI tests exercise routing, validation, serialization and responses
 in process; they do not establish browser-to-server connectivity.
 
