@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Repository foundation and architecture are complete. The matching engine, agent tools, API, and user interface are the next implementation stages.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, and offline compatibility scoring are implemented and tested. Agent integration, API, and user interface remain to be built.
 
 ## The problem
 
@@ -105,7 +105,8 @@ venturematch-ai/
 
 ## Local configuration
 
-The applications have not yet been bootstrapped, so there are no run commands at this stage. When implementation begins:
+The web interface and API are not yet bootstrapped. The backend already supports tests
+and offline matching demos (see `backend/README.md`). To configure future API-backed features:
 
 1. Clone the repository.
 2. Copy `.env.example` to `.env`.
@@ -126,7 +127,8 @@ cd venturematch-ai
 - [x] Generate synthetic business and investor datasets
 - [x] Add multi-currency normalization and flexible stage policies
 - [x] Implement deterministic eligibility filters
-- [ ] Implement and test the compatibility score
+- [x] Implement and test the offline compatibility score
+- [ ] Upgrade the lexical thesis baseline to embedding-based similarity
 - [ ] Expose matching functions as agent tools
 - [ ] Build the VentureMatch Agent
 - [ ] Build the FastAPI endpoints
@@ -163,6 +165,9 @@ These exclusions keep the demo focused on explainable discovery and compatibilit
 - [`docs/data-schemas.md`](docs/data-schemas.md) documents the contracts shared by the dataset, backend, agent, and frontend.
 - [`docs/currency-and-stage-policy.md`](docs/currency-and-stage-policy.md) defines supported currencies, FX provenance, and strict, adjacent, and open funding-stage exploration.
 - [`docs/eligibility-engine.md`](docs/eligibility-engine.md) specifies the hard-filter rules and explainable eligibility states used before scoring.
+
+See [compatibility scoring](docs/compatibility-scoring.md) for the versioned scoring
+policy, limitations, and runnable offline demo commands.
 
 ## License
 

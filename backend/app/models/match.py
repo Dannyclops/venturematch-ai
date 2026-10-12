@@ -8,7 +8,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 
 from .common import EntityId, SchemaModel, Score
-from .eligibility import EligibilityStatus
+from .eligibility import EligibilityResult, EligibilityStatus
 
 
 class MatchDirection(str, Enum):
@@ -77,4 +77,8 @@ class MatchResult(SchemaModel):
     concerns: Annotated[list[MatchConcern], Field(max_length=10)] = Field(default_factory=list)
     explanation: Annotated[str, Field(min_length=20, max_length=1_500)]
     confidence: ConfidenceLevel
+    scoring_version: Literal["compatibility_v1"]
+    thesis_similarity_method: Literal["keyword_jaccard_v1"]
+    scoring_weights: ScoreBreakdown
+    eligibility: EligibilityResult
 

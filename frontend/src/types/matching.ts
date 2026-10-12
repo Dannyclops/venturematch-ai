@@ -87,6 +87,10 @@ export interface MatchResult {
   concerns: MatchConcern[];
   explanation: string;
   confidence: ConfidenceLevel;
+  scoring_version: "compatibility_v1";
+  thesis_similarity_method: "keyword_jaccard_v1";
+  scoring_weights: ScoreBreakdown;
+  eligibility: EligibilityResult;
 }
 
 export interface MatchConstraints {

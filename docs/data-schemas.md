@@ -35,6 +35,11 @@ Eligibility rules run before ranking. A candidate that violates a hard constrain
 
 ### Facts versus explanations
 
+Scored results also include `scoring_version`, `thesis_similarity_method`,
+`scoring_weights`, and the full `eligibility` decision with normalized money provenance.
+The current method is explicitly lexical (`keyword_jaccard_v1`), despite retaining
+the existing `semantic_thesis_similarity` component field name.
+
 `MatchEvidence` identifies the entity and field supporting a recommendation. The natural-language explanation may summarize that evidence, but it may not introduce unsupported claims.
 
 ### Mode-safe requests

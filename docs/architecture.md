@@ -34,6 +34,11 @@ Pure Python functions perform hard filtering, component scoring, weight applicat
 
 The eligibility layer evaluates investor activity, industry mandate, funding stage, normalized ticket size, geography, and revenue requirements. It returns all rule outcomes so the interface and agent can explain both accepted and rejected candidates.
 
+The offline scorer is implemented as `CompatibilityEngine`, with explicit eligibility
+rechecks, versioned heuristic weights, lexical thesis similarity, portfolio warnings,
+and deterministic rankings in both directions. See
+[`compatibility-scoring.md`](compatibility-scoring.md) for the complete policy.
+
 ### 6. Data layer
 
 The first version uses synthetic JSON for portability and transparency. SQLite can be introduced when session or user persistence is required.
