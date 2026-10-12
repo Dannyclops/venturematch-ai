@@ -16,8 +16,9 @@ access code. Never place the OpenAI key in the repository, browser, or submissio
 3. Apply the Blueprint and wait for the deploy to become live. Open its
    actual `https://...onrender.com/` URL. Do not assume the service name alone
    determines the URL; copy it from Render.
-4. Test **Free matching engine** first. Then select **AI-assisted (uses credits)**,
-   enter the reviewer code, confirm one billable search, and wait for a ranked
+4. If you want a no-credit check first, select **Free matching engine** and run
+   a search. The hosted page otherwise selects **AI-assisted (uses credits)** by
+   default. Enter the reviewer code, confirm one billable search, and wait for a ranked
    result. Check `/api/health` if the page cannot connect.
 5. Submit the verified live URL with the temporary reviewer access code beside
    it, so judges can use the AI-assisted option. If the submission has a private

@@ -22,8 +22,9 @@ To demonstrate the optional agent, stop the free launcher with Ctrl+C and run:
 backend\.venv\Scripts\python.exe scripts\run_demo.py --live
 ```
 
-This enables the AI-assisted choice but does not call OpenAI until you select
-that choice and confirm a search in the browser. Each confirmed search is
+This makes AI-assisted the selected choice on the page once the backend connects,
+but does not call OpenAI until you click Find matches and confirm the search.
+Each confirmed search is
 billable. The backend loads the ignored `.env` key; the browser never receives
 it. If another engine-only backend still occupies port 8000, the launcher
 will tell you to stop it first. For separate terminals instead, in terminal 1:
@@ -57,7 +58,8 @@ sent with that search request and reset when a different profile is selected.
 
 To offer the **optional billable** AI-assisted choice, restart the backend with
 the environment flag described in [`../docs/live-agent-api.md`](../docs/live-agent-api.md).
-The UI never selects it by default and asks for confirmation before each request.
+The UI selects it by default only when the live agent is enabled and asks for
+confirmation before each request. Engine-only startup still selects the free engine.
 A browser disconnect can leave a paid run active, so inspect the server before
 retrying.
 

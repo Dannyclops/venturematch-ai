@@ -157,12 +157,13 @@ async function initialize() {
     for (const input of $("locations").querySelectorAll("input:checked")) input.checked = false;
     $("location-count").textContent = "All locations";
   });
-  $("execution").addEventListener("change", () => {
+  const updateExecutionControls = () => {
     $("demo-code-field").hidden = $("execution").value !== "live";
     $("execution-note").textContent = $("execution").value === "live"
       ? "AI-assisted mode makes a billable OpenAI request. You will confirm before each run."
       : "Engine mode does not call OpenAI or spend API credits.";
-  });
+  };
+  $("execution").addEventListener("change", updateExecutionControls);
   $("match-form").addEventListener("submit", runMatch);
   try {
     const [health, metadata] = await Promise.all([getJson("/api/health"), getJson("/api/metadata")]);
@@ -175,6 +176,8 @@ async function initialize() {
       const option = $("execution").options[1];
       option.disabled = false;
       option.textContent = "AI-assisted (uses credits)";
+      $("execution").value = "live";
+      updateExecutionControls();
     }
     $("connection").textContent = `API connected · ${state.liveEnabled ? "AI-assisted option available" : "free engine mode"} · all entities are fictional`;
     $("connection").className = "connection good";

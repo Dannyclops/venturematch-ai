@@ -12,8 +12,8 @@ ColdChain Solar at 77.06/100 with evidence. Rehearse on the presentation machine
 2. Check that the search panel says **Local API connected**.
 3. Leave execution on **Free matching engine** for a predictable, no-cost demo.
    To demonstrate the agent, stop the launcher with Ctrl+C and rerun it with
-   `--live`. Then refresh the browser, select **AI-assisted (uses credits)**,
-   and confirm one search. Each confirmed run consumes credits. Wait for a
+   `--live`. Then refresh the browser; **AI-assisted (uses credits)** is selected
+   on the page. Confirm one search. Each confirmed run consumes credits. Wait for a
    result before clicking again; if the outcome is uncertain, inspect the
    terminal and account usage before retrying.
 
