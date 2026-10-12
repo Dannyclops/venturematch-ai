@@ -125,7 +125,7 @@ cd venturematch-ai
 - [x] Define Pydantic and TypeScript schemas
 - [x] Generate synthetic business and investor datasets
 - [x] Add multi-currency normalization and flexible stage policies
-- [ ] Implement deterministic eligibility filters
+- [x] Implement deterministic eligibility filters
 - [ ] Implement and test the compatibility score
 - [ ] Expose matching functions as agent tools
 - [ ] Build the VentureMatch Agent
@@ -162,6 +162,7 @@ These exclusions keep the demo focused on explainable discovery and compatibilit
 - [`docs/architecture.md`](docs/architecture.md) explains component responsibilities, the agent execution flow, scoring rules, and initial API boundaries.
 - [`docs/data-schemas.md`](docs/data-schemas.md) documents the contracts shared by the dataset, backend, agent, and frontend.
 - [`docs/currency-and-stage-policy.md`](docs/currency-and-stage-policy.md) defines supported currencies, FX provenance, and strict, adjacent, and open funding-stage exploration.
+- [`docs/eligibility-engine.md`](docs/eligibility-engine.md) specifies the hard-filter rules and explainable eligibility states used before scoring.
 
 ## License
 

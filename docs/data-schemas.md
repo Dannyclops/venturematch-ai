@@ -11,6 +11,7 @@ These schemas form the contract among the synthetic dataset, matching engine, ag
 | Shared values | `Location`, `MoneyAmount`, `MoneyRange`, `FxSnapshot`, normalized money models | Reusable validated primitives and currency-conversion evidence |
 | Business | `BusinessProfile`, `TractionMetrics` | Founder and company information |
 | Investor | `InvestorProfile`, `PortfolioCompany` | Investment preferences and portfolio evidence |
+| Eligibility | `EligibilityCheck`, `EligibilityResult` | Pre-scoring rule outcomes, normalized money evidence, and final eligibility state |
 | Matching | `ScoreBreakdown`, `MatchEvidence`, `MatchConcern`, `MatchResult` | Explainable ranked recommendations |
 | Agent API | `MatchRequest`, `RefinementRequest`, `MatchResponse` | Agent input, refinement, progress, and output |
 
@@ -29,6 +30,8 @@ The original currency is preserved. `NormalizedMoneyAmount` and `NormalizedMoney
 ### Hard constraints versus scores
 
 Eligibility rules run before ranking. A candidate that violates a hard constraint should be removed or marked as blocking; a high semantic-similarity score must not override the conflict.
+
+`EligibilityResult` contains one check per evaluated rule and derives `core_eligible`, `exploration_eligible`, or `ineligible` from those outcomes. An `ineligible` result cannot proceed to scoring.
 
 ### Facts versus explanations
 

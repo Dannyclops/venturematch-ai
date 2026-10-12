@@ -4,6 +4,8 @@ import type {
   Industry,
   InvestorProfile,
   MoneyRange,
+  NormalizedMoneyAmount,
+  NormalizedMoneyRange,
   SupportedCurrency,
 } from "./domain";
 
@@ -12,6 +14,35 @@ export type MatchDirection = "founder_to_investor" | "investor_to_business";
 export type ConfidenceLevel = "low" | "medium" | "high";
 export type ConcernSeverity = "info" | "warning" | "blocking";
 export type AgentActivityStatus = "pending" | "running" | "completed" | "failed";
+export type EligibilityStatus =
+  | "core_eligible"
+  | "exploration_eligible"
+  | "ineligible";
+export type DiscoverableEligibilityStatus = Exclude<EligibilityStatus, "ineligible">;
+export type EligibilityRule =
+  | "investor_activity"
+  | "industry_mandate"
+  | "funding_stage"
+  | "ticket_size"
+  | "geography"
+  | "revenue_requirement";
+export type EligibilityOutcome = "passed" | "exploration" | "blocking";
+
+export interface EligibilityCheck {
+  rule: EligibilityRule;
+  outcome: EligibilityOutcome;
+  code: string;
+  message: string;
+}
+
+export interface EligibilityResult {
+  business_id: string;
+  investor_id: string;
+  status: EligibilityStatus;
+  checks: EligibilityCheck[];
+  normalized_raise: NormalizedMoneyAmount;
+  normalized_ticket: NormalizedMoneyRange;
+}
 
 export type MatchFactor =
   | "industry_alignment"
@@ -48,6 +79,7 @@ export interface MatchResult {
   query_entity_id: string;
   candidate_entity_id: string;
   candidate_name: string;
+  eligibility_status: DiscoverableEligibilityStatus;
   rank: number;
   overall_score: number;
   score_breakdown: ScoreBreakdown;

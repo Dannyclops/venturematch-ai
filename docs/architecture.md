@@ -32,6 +32,8 @@ Thin tool interfaces expose profile analysis, candidate retrieval, scoring, port
 
 Pure Python functions perform hard filtering, component scoring, weight application, ranking, and confidence calculation. These functions should have unit tests and no dependency on an LLM.
 
+The eligibility layer evaluates investor activity, industry mandate, funding stage, normalized ticket size, geography, and revenue requirements. It returns all rule outcomes so the interface and agent can explain both accepted and rejected candidates.
+
 ### 6. Data layer
 
 The first version uses synthetic JSON for portability and transparency. SQLite can be introduced when session or user persistence is required.
@@ -63,6 +65,7 @@ The first version uses synthetic JSON for portability and transparency. SQLite c
 Each recommended match must include:
 
 - Entity identifier and display name
+- Core or exploration eligibility status
 - Overall compatibility score
 - Component scores
 - Supporting evidence

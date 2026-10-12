@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field
 
 from .common import EntityId, SchemaModel, Score
+from .eligibility import EligibilityStatus
 
 
 class MatchDirection(str, Enum):
@@ -65,6 +66,10 @@ class MatchResult(SchemaModel):
     query_entity_id: EntityId
     candidate_entity_id: EntityId
     candidate_name: Annotated[str, Field(min_length=2, max_length=120)]
+    eligibility_status: Literal[
+        EligibilityStatus.CORE_ELIGIBLE,
+        EligibilityStatus.EXPLORATION_ELIGIBLE,
+    ]
     rank: Annotated[int, Field(ge=1)]
     overall_score: Score
     score_breakdown: ScoreBreakdown

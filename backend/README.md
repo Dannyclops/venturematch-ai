@@ -17,7 +17,8 @@ The matching engine must remain usable and testable independently of the languag
 
 - `app/models/` contains the canonical Pydantic data contracts.
 - `app/services/currency.py` normalizes supported currencies through a versioned FX snapshot.
-- `tests/` contains schema and currency-service contract tests.
+- `app/matching/eligibility.py` applies deterministic hard filters before scoring.
+- `tests/` contains schema, currency-service, and eligibility-engine contract tests.
 - `pyproject.toml` declares the Python and development dependencies.
 
 Install the backend development dependencies from this directory with:

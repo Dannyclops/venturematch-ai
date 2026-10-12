@@ -23,6 +23,13 @@ from .common import (
     NormalizedMoneyRange,
     SupportedCurrency,
 )
+from .eligibility import (
+    EligibilityCheck,
+    EligibilityOutcome,
+    EligibilityResult,
+    EligibilityRule,
+    EligibilityStatus,
+)
 from .investor import (
     InvestmentRole,
     InvestorProfile,
@@ -48,6 +55,11 @@ __all__ = [
     "BusinessProfile",
     "ConfidenceLevel",
     "ConcernSeverity",
+    "EligibilityCheck",
+    "EligibilityOutcome",
+    "EligibilityResult",
+    "EligibilityRule",
+    "EligibilityStatus",
     "FundingStage",
     "FxRate",
     "FxSnapshot",

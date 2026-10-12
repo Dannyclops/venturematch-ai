@@ -54,6 +54,8 @@ It checks:
 - Money ranges and currency formats
 - FX snapshot coverage and conversion inputs
 - Funding-stage flexibility rules
+- Geographic mandate coverage and regional expansion
+- Active-investor and revenue eligibility requirements
 - Required text and list fields
 - Revenue consistency
 - Investor industry conflicts

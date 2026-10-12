@@ -55,6 +55,38 @@ const fundingStageOrder = new Map([
   ["series_c_plus", 5],
   ["growth", 6],
 ]);
+const countryCodeNames = new Map([
+  ["AE", "united arab emirates"],
+  ["EG", "egypt"],
+  ["GH", "ghana"],
+  ["KE", "kenya"],
+  ["NG", "nigeria"],
+  ["TR", "turkiye"],
+  ["ZA", "south africa"],
+]);
+const geographyAliases = new Map([
+  ["middle east and north africa", "mena"],
+  ["turkey", "turkiye"],
+  ["u a e", "united arab emirates"],
+  ["uae", "united arab emirates"],
+]);
+const countryRegions = new Map([
+  ["botswana", ["africa", "southern africa", "emerging markets"]],
+  ["cote d'ivoire", ["africa", "west africa", "emerging markets"]],
+  ["egypt", ["africa", "mena", "emerging markets"]],
+  ["ghana", ["africa", "west africa", "emerging markets"]],
+  ["jordan", ["mena", "emerging markets"]],
+  ["kenya", ["africa", "east africa", "emerging markets"]],
+  ["namibia", ["africa", "southern africa", "emerging markets"]],
+  ["nigeria", ["africa", "west africa", "emerging markets"]],
+  ["saudi arabia", ["mena", "emerging markets"]],
+  ["senegal", ["africa", "west africa", "emerging markets"]],
+  ["south africa", ["africa", "southern africa", "emerging markets"]],
+  ["tanzania", ["africa", "east africa", "emerging markets"]],
+  ["turkiye", ["europe", "southeast europe", "emerging markets"]],
+  ["uganda", ["africa", "east africa", "emerging markets"]],
+  ["united arab emirates", ["mena", "emerging markets"]],
+]);
 const idPattern = /^[a-z0-9][a-z0-9_-]{2,63}$/;
 const countryPattern = /^[A-Z]{2}$/;
 
@@ -250,18 +282,61 @@ function stageIsAcceptedForDiscovery(stage, investor) {
   return investor.exploratory_stages.includes(stage);
 }
 
+function normalizeGeography(value) {
+  const normalized = value
+    .toLocaleLowerCase("en-US")
+    .normalize("NFKD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/’/g, "'")
+    .replace(/\./g, " ")
+    .replace(/-/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+  return geographyAliases.get(normalized) ?? normalized;
+}
+
+function businessGeographyTags(business) {
+  const directValues = [
+    ...business.operating_markets,
+    business.headquarters.city,
+    business.headquarters.region,
+    countryCodeNames.get(business.headquarters.country_code),
+  ].filter(Boolean);
+  const tags = new Set(directValues.map(normalizeGeography));
+  [...tags].forEach((value) => {
+    for (const region of countryRegions.get(value) ?? []) tags.add(region);
+  });
+  return tags;
+}
+
+function geographyMatches(business, investor) {
+  const investorGeographies = investor.preferred_geographies.map(normalizeGeography);
+  if (investorGeographies.includes("global")) return true;
+  const businessTags = businessGeographyTags(business);
+  return investorGeographies.some((value) => businessTags.has(value));
+}
+
 function businessHasStructurallyEligibleInvestor(business, investors, rates) {
   const isRevenueGenerating = business.traction?.is_revenue_generating ?? false;
   const businessAmountInUsd = business.amount_raising.amount * rates.get(business.amount_raising.currency);
   return investors.some((investor) => {
-    const industryMatches = investor.preferred_industries.includes(business.primary_industry);
+    const industryMatches =
+      investor.preferred_industries.includes(business.primary_industry) &&
+      !investor.excluded_industries.includes(business.primary_industry);
     const stageMatches = stageIsAcceptedForDiscovery(business.funding_stage, investor);
     const investorMinimumInUsd = investor.ticket_size.minimum * rates.get(investor.ticket_size.currency);
     const investorMaximumInUsd = investor.ticket_size.maximum * rates.get(investor.ticket_size.currency);
     const amountMatches =
       businessAmountInUsd >= investorMinimumInUsd && businessAmountInUsd <= investorMaximumInUsd;
     const revenueMatches = !investor.requires_revenue || isRevenueGenerating;
-    return industryMatches && stageMatches && amountMatches && revenueMatches;
+    return (
+      investor.actively_investing &&
+      industryMatches &&
+      stageMatches &&
+      amountMatches &&
+      geographyMatches(business, investor) &&
+      revenueMatches
+    );
   });
 }
 
