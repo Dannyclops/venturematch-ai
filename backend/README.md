@@ -1,20 +1,16 @@
 # VentureMatch AI Backend
 
-This directory will contain the Python backend, including:
-
-- FastAPI routes
-- Pydantic data models
-- Deterministic eligibility filters
-- Compatibility scoring
-- Embedding-based similarity
-- Agent tool definitions
-- VentureMatch Agent orchestration
-- Scenario-based tests
+This directory contains the Python backend: Pydantic contracts, deterministic
+eligibility and compatibility scoring, local agent tools, a bounded OpenAI agent
+runtime, and an engine-only FastAPI service. Thesis similarity currently uses a
+keyword baseline; embeddings and live agent HTTP routes remain future work.
 
 The matching engine must remain usable and testable independently of the language model.
 
 ## Current structure
 
+- `app/main.py` and `app/api/` expose the local profile, metadata, and matching endpoints.
+- `app/services/matching.py` assembles engine-only responses from existing tool outputs.
 - `app/models/` contains the canonical Pydantic data contracts.
 - `app/services/currency.py` normalizes supported currencies through a versioned FX snapshot.
 - `app/matching/eligibility.py` applies deterministic hard filters before scoring.
@@ -22,7 +18,7 @@ The matching engine must remain usable and testable independently of the languag
 - `app/tools/` provides request-bound tool contracts, registry, dispatcher, and demo harness.
 - `app/agent/` provides the OpenAI Agents API adapter, bounded runner, and evidence-only output validation.
 - `python -m app.matching --business business_solargrid_africa` runs the offline JSON demo.
-- `tests/` contains schema, currency-service, and eligibility-engine contract tests.
+- `tests/` covers schemas, FX, eligibility, scoring, tools, agent recovery, and HTTP contracts.
 - `pyproject.toml` declares the Python and development dependencies.
 
 Install the backend development dependencies from this directory with:
@@ -45,6 +41,20 @@ On Windows, the tested project environment can be invoked without activation:
 ```
 
 See [scoring policy](../docs/compatibility-scoring.md) for weights and limitations.
+
+## Local HTTP API (no OpenAI credit needed)
+
+After installing the dependencies above, start the service from this directory:
+
+```powershell
+.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000/docs`. Profile lists are at `/api/businesses` and
+`/api/investors`; POST a `MatchRequest` to `/api/matches` for engine-only results.
+`/api/metadata` supplies form choices and synthetic FX provenance.
+See [backend API](../docs/backend-api.md) for a runnable PowerShell example,
+validation behavior, response contracts, and verification status.
 
 ## Local agent-tool harness
 

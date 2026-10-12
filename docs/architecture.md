@@ -18,7 +18,9 @@ Collects structured profile fields and an optional natural-language objective. I
 
 ### 2. FastAPI service
 
-Validates incoming requests, starts or resumes an agent session, invokes the matching engine, and returns structured responses to the interface.
+The implemented service validates requests, lists demo profiles, invokes the local
+matching engine, and returns structured engine-only responses. Live agent HTTP
+execution and session persistence are not implemented. See [backend-api.md](backend-api.md).
 
 ### 3. VentureMatch Agent
 
@@ -52,7 +54,7 @@ and deterministic rankings in both directions. See
 
 The first version uses synthetic JSON for portability and transparency. SQLite can be introduced when session or user persistence is required.
 
-## Execution flow
+## Planned agent execution flow
 
 1. The API validates the request.
 2. The agent determines the user mode and objective.
@@ -64,15 +66,20 @@ The first version uses synthetic JSON for portability and transparency. SQLite c
 8. The agent returns ranked matches using a structured response schema.
 9. A follow-up request can refine constraints and rerun the relevant tools.
 
-## Initial API boundary
+## Implemented API boundary
 
 | Method | Path | Purpose |
 |---|---|---|
 | `GET` | `/api/health` | Confirm backend availability |
 | `GET` | `/api/businesses` | Return demo business profiles |
 | `GET` | `/api/investors` | Return demo investor profiles |
-| `POST` | `/api/agent/match` | Start an agentic matching run |
-| `POST` | `/api/agent/refine` | Refine a previous run |
+| `GET` | `/api/businesses/{entity_id}` | Retrieve one demo business |
+| `GET` | `/api/investors/{entity_id}` | Retrieve one demo investor |
+| `GET` | `/api/metadata` | Form options and synthetic FX provenance |
+| `POST` | `/api/matches` | Run engine-only matching with structured constraints |
+
+`/api/agent/match` and `/api/agent/refine` remain planned and are not registered.
+For now, refinement means submitting a new `MatchRequest` with changed constraints.
 
 ## Match-response requirements
 

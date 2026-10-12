@@ -16,6 +16,9 @@ startup stalls before application code starts, so async runs should use a normal
 terminal. After the recovery changes, the complete suite passed in the user's normal
 PowerShell terminal: **161 tests passed in 6.18 seconds** on 2026-10-12, confirmed
 by the supplied screenshot. End-to-end live matching is not yet verified.
+After adding the engine-only HTTP API, the full suite also completed in the development
+session: **184 tests passed in 14.42 seconds**, including the asynchronous tests.
+The earlier asyncio startup restriction did not recur during that verification.
 Run the complete suite with `.\.venv\Scripts\python.exe -m pytest -q`.
 
 ## Recovery after the first live failure
@@ -145,7 +148,8 @@ not resume a provider session in this version.
 
 The host enforces matching facts; prompts are not a complete prompt-injection defense.
 Catalog data and profiles remain untrusted. No live web enrichment, embedding upgrade,
-FastAPI route, UI, valuation, or investment execution is included in this phase.
+live-agent FastAPI route, UI, valuation, or investment execution is included in this phase.
+The separate [engine-only HTTP API](backend-api.md) is available without OpenAI calls.
 
 ## References
 

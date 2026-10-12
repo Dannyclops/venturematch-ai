@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, and local agent-tool dispatch are implemented and tested. Live agent integration, API, and user interface remain to be built.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, and the bounded agent runtime are implemented. The local engine-only FastAPI service is implemented; live AI verification is pending API billing, and the user interface remains to be built. See the backend documentation for verification status.
 
 ## The problem
 
@@ -105,8 +105,10 @@ venturematch-ai/
 
 ## Local configuration
 
-The web interface and API are not yet bootstrapped. The backend already supports tests
-and offline matching demos (see `backend/README.md`). To configure future API-backed features:
+The backend supports a local engine-only HTTP API, tests, and offline matching demos
+(see `backend/README.md`). The web interface is not yet built. OpenAI credentials are
+required only for explicit live agent runs; engine-only matching works without them.
+To configure the project:
 
 1. Clone the repository.
 2. Copy `.env.example` to `.env`.
@@ -132,7 +134,8 @@ cd venturematch-ai
 - [x] Expose matching functions through local typed tool dispatch
 - [x] Register tools and build the bounded VentureMatch Agent runtime
 - [ ] Verify live OpenAI access and end-to-end tool calls in both modes
-- [ ] Build the FastAPI endpoints
+- [x] Build engine-only FastAPI profile and matching endpoints
+- [ ] Expose verified live agent execution through the API
 - [ ] Build founder and investor interface flows
 - [ ] Add conversational refinement
 - [ ] Run scenario-based evaluations
@@ -175,6 +178,9 @@ search-filter semantics, and the local tool harness.
 
 See [agent runtime](docs/agent-runtime.md) for the OpenAI runner, evidence-grounded
 output contract, live commands, and verification limitations.
+
+See [backend API](docs/backend-api.md) for local startup, profile browsing, engine-only
+matching, HTTP contracts, and verification status.
 
 ## License
 
