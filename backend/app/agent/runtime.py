@@ -8,12 +8,13 @@ from copy import deepcopy
 from typing import Annotated, Any, Literal
 from uuid import uuid4
 
-from openai import APIConnectionError, APIStatusError, APITimeoutError
+from openai import APIStatusError
 from pydantic import Field, ValidationError
 
 from app.models import AgentActivity, MatchFactor, MatchRequest, MatchResponse
 from app.models.common import EntityId, SchemaModel
 from app.tools import MatchingCatalog, MatchingTools
+from .diagnostics import error_category, provider_code, safe_exception
 
 
 class AgentSettings(SchemaModel):
@@ -47,6 +48,7 @@ class AgentRun(SchemaModel):
     highlights: list[EvidenceHighlight]
     usage: dict[str, Any] | None = None
     cleanup_warnings: list[str] = Field(default_factory=list)
+    cleanup_diagnostics: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AgentFailure(Exception):
@@ -58,10 +60,13 @@ class AgentFailure(Exception):
         self.session_id: str | None = None
         self.turn_id: str | None = None
         self.cleanup_warnings: list[str] = []
+        self.diagnostics: dict[str, Any] = {}
+        self.cleanup_diagnostics: list[dict[str, Any]] = []
 
     def as_dict(self) -> dict[str, Any]:
         return {"code": self.code, "message": str(self), "session_id": self.session_id,
-                "turn_id": self.turn_id, "cleanup_warnings": self.cleanup_warnings}
+                "turn_id": self.turn_id, "cleanup_warnings": self.cleanup_warnings,
+                "diagnostics": self.diagnostics, "cleanup_diagnostics": self.cleanup_diagnostics}
 
 
 def strict_schema(schema: dict[str, Any]) -> dict[str, Any]:
@@ -129,6 +134,8 @@ class VentureMatchAgent:
         self._profile_called = False
         self._all_scored = False
         self._used = False
+        self._stage = "preflight"
+        self._cleanup_diagnostics: list[dict[str, Any]] = []
 
     def _checked_tool(self, name, args):
         result = self.toolbox.invoke(name, args)
@@ -224,28 +231,25 @@ class VentureMatchAgent:
         try:
             async with asyncio.timeout(self.settings.timeout_seconds):
                 outcome = await self._execute(client)
-        except (TimeoutError, APITimeoutError):
-            failure = AgentFailure("timeout", "The agent timed out; do not automatically retry this run.")
-        except APIConnectionError:
-            failure = AgentFailure("connection_error", "Cannot reach OpenAI. Check network access before retrying.")
-        except APIStatusError as error:
-            code = {401: "authentication_error", 403: "access_denied", 429: "rate_or_quota_limit"}.get(
-                error.status_code, "provider_error")
-            failure = AgentFailure(code, "OpenAI rejected the request. Check project access, billing, and limits.")
         except AgentFailure as error:
             failure = error
-        except Exception:
-            failure = AgentFailure("agent_error", "The agent run failed; raw provider output was withheld.")
+            failure.diagnostics = {**safe_exception(error, self._stage), **failure.diagnostics}
+        except Exception as error:
+            failure = AgentFailure(error_category(error),
+                                   "The run failed. Inspect the safe diagnostics before retrying.")
+            failure.diagnostics = safe_exception(error, self._stage)
         finally:
             cleanup_warnings = await self._cleanup(client, cancel=outcome is None)
         if failure:
             failure.session_id, failure.turn_id = self.session_id, self.turn_id
             failure.cleanup_warnings = cleanup_warnings
+            failure.cleanup_diagnostics = self._cleanup_diagnostics
             if self.session_id is None:
                 failure.cleanup_warnings.append(
                     "No session ID was received. If creation reached OpenAI, check Platform before retrying.")
             raise failure
         outcome.cleanup_warnings = cleanup_warnings
+        outcome.cleanup_diagnostics = self._cleanup_diagnostics
         return outcome
 
     @staticmethod
@@ -261,6 +265,7 @@ class VentureMatchAgent:
         environment = {"type": settings.environment}
         if settings.environment == "openai_hosted":
             environment.update(container_size="small", network={"access": "disabled"})
+        self._stage = "create_session"
         stream = await client.beta.agents.sessions.create(
             agent={"model": settings.model, "instructions": INSTRUCTIONS,
                    "multi_agent": {"enabled": False},
@@ -274,13 +279,15 @@ class VentureMatchAgent:
         completed, final_text, usage = False, "", None
         async with stream:
             count = 0
+            self._stage = "read_stream"
             async for raw_event in stream:
+                self._stage = "parse_event"
                 count += 1
                 if count > 2000:
                     raise AgentFailure("event_limit", "The run exceeded its event limit.")
                 event = raw_event.model_dump(mode="json")
                 kind = event["type"]
-                session = event.get("session", {})
+                session = event.get("session") or {}
                 event_session = event.get("session_id") or session.get("id")
                 if event_session:
                     if self.session_id and self.session_id != event_session:
@@ -296,7 +303,9 @@ class VentureMatchAgent:
                     for action in actions:
                         if self.turn_id is None:
                             self.turn_id = action.get("turn_id")
+                        self._stage = "dispatch_tool"
                         output = self.dispatch(action)
+                        self._stage = "submit_tool"
                         await client.beta.agents.sessions.events.create(self.session_id, events=[output])
                 elif kind == "agent.session.turn.item.done":
                     candidate_text = self._final_text(event["item"])
@@ -306,16 +315,24 @@ class VentureMatchAgent:
                     completed = event.get("turn", {}).get("status") == "completed"
                     usage = event.get("usage")
                     break
-                elif kind.endswith((".failed", ".cancelled")) or kind == "agent.session.error":
-                    raise AgentFailure("remote_failure", "The remote session or turn failed or was cancelled.")
+                elif kind.endswith((".failed", ".cancelled")) or kind in {"error", "agent.session.error"}:
+                    failure = AgentFailure("remote_failure", "The remote session or turn failed or was cancelled.")
+                    remote = event.get("error") or (event.get("turn") or {}).get("error")
+                    code = provider_code(remote.get("code")) if isinstance(remote, dict) else None
+                    if code:
+                        failure.diagnostics["provider_code"] = code
+                    raise failure
+                self._stage = "read_stream"
         # Reconcile persisted state after a clean early disconnect or a missing final item.
         # Never resubmit initial input or infer success from an idle session.
         if not completed or not final_text:
             if not self.session_id or not self.turn_id:
                 raise AgentFailure("incomplete_stream", "The stream ended before a session and turn were identified.")
+            self._stage = "retrieve_turn"
             turn = await client.beta.agents.sessions.turns.retrieve(self.turn_id, session_id=self.session_id)
             if turn.status != "completed":
                 raise AgentFailure("incomplete_turn", "The intended turn has not completed successfully.")
+            self._stage = "retrieve_items"
             items = client.beta.agents.sessions.items.list(self.session_id, order="desc", limit=100)
             async for item in items:
                 record = item.model_dump(mode="json")
@@ -325,6 +342,7 @@ class VentureMatchAgent:
                         break
         if not final_text:
             raise AgentFailure("missing_output", "The completed turn has no final structured answer.")
+        self._stage = "validate_output"
         response, highlights = self.finalize(final_text)
         return AgentRun(response=response, session_id=self.session_id, turn_id=self.turn_id,
                         model=settings.model, highlights=highlights, usage=usage)
@@ -334,23 +352,31 @@ class VentureMatchAgent:
             return []
         sessions = client.beta.agents.sessions
         warnings = []
+        cleanup_stage = "cancel_session" if cancel else "delete_session"
         try:
             async with asyncio.timeout(25):
                 if cancel:
                     try:
                         await sessions.events.create(self.session_id,
                                                      events=[{"type": "agent.session.input.cancel"}])
-                    except Exception:
+                    except Exception as error:
+                        self._cleanup_diagnostics.append(safe_exception(error, "cancel_session"))
                         warnings.append("Remote cancellation was not confirmed.")
+                cleanup_stage = "delete_session"
                 try:
                     await sessions.delete(self.session_id)
                 except APIStatusError as error:
+                    if error.status_code == 404:
+                        return warnings
                     if error.status_code != 409:
                         raise
+                    cleanup_stage = "cancel_session"
                     await sessions.events.create(self.session_id,
                                                  events=[{"type": "agent.session.input.cancel"}])
                     await asyncio.sleep(0.25)
+                    cleanup_stage = "delete_session"
                     await sessions.delete(self.session_id)
-        except Exception:
+        except Exception as error:
+            self._cleanup_diagnostics.append(safe_exception(error, cleanup_stage))
             warnings.append(f"Session cleanup was not confirmed: {self.session_id}. Check Platform.")
         return warnings

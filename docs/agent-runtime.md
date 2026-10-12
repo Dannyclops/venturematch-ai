@@ -8,13 +8,59 @@ It is not the separate `openai-agents` package, an Assistants API implementation
 or a fixed sequence presented as an AI run. The model chooses function calls.
 Local scripted-provider tests do not establish remote API access or output quality.
 
-Current verification: **128 tests passed in 4.84 seconds** in the user's normal
+Initial runtime verification: **128 tests passed in 4.84 seconds** in the user's normal
 PowerShell terminal on 2026-10-12, as confirmed by the supplied test-result screenshot.
 This includes the six asynchronous tests. Separately, 122 synchronous tests passed
 inside the restricted development environment; its Windows asyncio socket-pair
 startup stalls before application code starts, so async runs should use a normal
-terminal. No live OpenAI request or hosted sandbox operation has been verified.
+terminal. After the recovery changes, the complete suite passed in the user's normal
+PowerShell terminal: **161 tests passed in 6.18 seconds** on 2026-10-12, confirmed
+by the supplied screenshot. End-to-end live matching is not yet verified.
 Run the complete suite with `.\.venv\Scripts\python.exe -m pytest -q`.
+
+## Recovery after the first live failure
+
+The first live session was inspected and successfully deleted on 2026-10-12.
+The recovery output confirmed `ok: true` and `deletion_confirmed: true`; the
+original turn had failed with `usage_limit_exceeded`. The account's billing screen
+showed a free trial with $0.00 credit remaining. Resolve API billing/limits before
+another live matching attempt; model access and live output quality remain unverified.
+Safe diagnostics now include a stage, exception class, recognized provider code,
+HTTP status if available, and application file/line locations. There are no raw
+exception messages, headers, prompts, tool arguments, frame locals, or model output.
+General streaming `APIError` is now classified separately from unexpected local
+exceptions. Billing/quota, rate limits, and access codes are distinguished when the
+provider supplies a recognized code. The original Python traceback was not retained;
+the remote turn's failure code was obtained through the recovery command.
+
+From `backend/`:
+
+```powershell
+# Read-only inspection; prompts for the existing sess_ ID when not supplied.
+.\.venv\Scripts\python.exe -m app.agent.maintenance --inspect
+
+# Inspect first, then cancel/delete ONLY the supplied disposable demo session.
+.\.venv\Scripts\python.exe -m app.agent.maintenance --cleanup
+```
+
+Copy the exact `session_id` from the original terminal output, not screenshot OCR.
+Do not enter an API key. Recovery uses a synchronous client and does not create a
+session, submit user input, or request inference. It reports turn error codes and
+statuses, never session message bodies. The cleanup report preserves the pre-delete
+status/error summary; deleting removes the remote session and its saved history.
+Existing hosted-resource costs may continue until cleanup finishes; the command
+does not claim zero charges or stop billing merely because cancellation was accepted.
+
+Deletion must explicitly confirm the same ID. A 404 is reported as not found/not
+visible, not proof of deletion. Cleanup makes at most three delete attempts on 409;
+other failures stop without retry. Each request has a 10-second timeout, with SDK
+automatic retries disabled. Physical hosted cleanup may continue asynchronously
+after successful deletion.
+
+The regression suite includes the actual installed SDK with an in-memory HTTP
+transport, exercising streaming-error handling and recovery endpoint shapes without
+network access or charges. These recovery tests are included in the verified 161-test
+result above; they do not establish that a live matching run will succeed.
 
 The default model is `gpt-6-astra`, following the current Agents API quickstart.
 Change it with `--model` or `OPENAI_MODEL`; project access must be checked live.

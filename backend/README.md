@@ -67,3 +67,8 @@ This invokes the local application tools, not an LLM. See
 See [agent runtime](../docs/agent-runtime.md) for configuration, the evidence-only
 explanation policy, lifecycle cleanup, limits, and live-verification requirements.
 
+For an existing failed live session, use `python -m app.agent.maintenance --inspect`
+or `--cleanup`. These prompt for the original session ID and never start a new model
+turn. Cleanup removes only that session and its history; inspect first if its
+contents need to be retained. See the recovery section of the runtime documentation.
+
