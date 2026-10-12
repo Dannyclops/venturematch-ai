@@ -192,6 +192,8 @@ execution bounds, safe errors, and remaining live checks.
 
 See [demo runbook](docs/demo-runbook.md) for local launch and a short walkthrough.
 See [demo evaluation](docs/demo-evaluation.md) for repeatable no-credit scenarios.
+See [public demo deployment](docs/public-demo.md) for the hosted link and
+reviewer access-code setup.
 
 ## License
 

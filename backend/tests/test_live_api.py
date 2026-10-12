@@ -81,6 +81,28 @@ def test_live_endpoint_requires_header_and_valid_request_before_client_creation(
             assert SECRET not in invalid.text
 
 
+def test_hosted_live_endpoint_requires_demo_code(monkeypatch):
+    monkeypatch.setenv("VENTUREMATCH_REQUIRE_DEMO_CODE", "1")
+    monkeypatch.setenv("VENTUREMATCH_DEMO_ACCESS_CODE", "reviewer-demo-code")
+    catalog = MatchingCatalog.from_demo()
+    with TestClient(create_app(catalog, live_agent=LiveAgentService(SECRET))) as client:
+        missing = client.post("/api/agent/match", json=payload(catalog), headers=CONFIRM)
+        assert missing.status_code == 403
+        assert missing.json()["error"]["code"] == "demo_access_required"
+        wrong = client.post("/api/agent/match", json=payload(catalog), headers={
+            **CONFIRM, "X-VentureMatch-Demo-Code": "wrong",
+        })
+        assert wrong.status_code == 403
+        assert client.post("/api/matches", json=payload(catalog)).status_code == 200
+
+
+def test_hosted_live_configuration_refuses_missing_code(monkeypatch):
+    monkeypatch.setenv("VENTUREMATCH_REQUIRE_DEMO_CODE", "1")
+    monkeypatch.delenv("VENTUREMATCH_DEMO_ACCESS_CODE", raising=False)
+    with pytest.raises(RuntimeError, match="demo access code"):
+        create_app(MatchingCatalog.from_demo(), live_agent=LiveAgentService(SECRET))
+
+
 @pytest.mark.parametrize("code,status", [
     ("timeout", 504), ("usage_limit", 503), ("billing_or_quota_error", 503),
     ("authentication_error", 503), ("rate_limit", 429), ("connection_error", 502),

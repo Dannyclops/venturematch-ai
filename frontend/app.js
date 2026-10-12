@@ -1,6 +1,8 @@
 "use strict";
 
-const api = `http://${location.hostname === "localhost" ? "localhost" : "127.0.0.1"}:8000`;
+const api = location.port === "3000"
+  ? `http://${location.hostname === "localhost" ? "localhost" : "127.0.0.1"}:8000`
+  : location.origin;
 const $ = (id) => document.getElementById(id);
 const labels = (value) => String(value).replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
 const factors = [
@@ -156,6 +158,7 @@ async function initialize() {
     $("location-count").textContent = "All locations";
   });
   $("execution").addEventListener("change", () => {
+    $("demo-code-field").hidden = $("execution").value !== "live";
     $("execution-note").textContent = $("execution").value === "live"
       ? "AI-assisted mode makes a billable OpenAI request. You will confirm before each run."
       : "Engine mode does not call OpenAI or spend API credits.";
@@ -173,7 +176,7 @@ async function initialize() {
       option.disabled = false;
       option.textContent = "AI-assisted (uses credits)";
     }
-    $("connection").textContent = `Local API connected · ${state.liveEnabled ? "AI-assisted option available" : "free engine mode"} · all entities are fictional`;
+    $("connection").textContent = `API connected · ${state.liveEnabled ? "AI-assisted option available" : "free engine mode"} · all entities are fictional`;
     $("connection").className = "connection good";
     await loadProfiles();
   } catch (error) {
@@ -230,7 +233,10 @@ async function runMatch(event) {
   try {
     const result = await getJson(live ? "/api/agent/match" : "/api/matches", {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...(live ? { "X-VentureMatch-Live": "true" } : {}) },
+      headers: { "Content-Type": "application/json", ...(live ? {
+        "X-VentureMatch-Live": "true",
+        "X-VentureMatch-Demo-Code": $("demo-code").value.trim(),
+      } : {}) },
       body: JSON.stringify(request),
     });
     if (modeAtStart === state.mode) renderResult(result);

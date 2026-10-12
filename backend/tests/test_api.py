@@ -44,6 +44,13 @@ def test_http_health_metadata_and_no_live_routes(client):
     assert client.post("/api/agent/match", json={}).status_code == 404
 
 
+def test_same_origin_demo_assets(client):
+    page = client.get("/")
+    assert page.status_code == 200 and "VentureMatch AI" in page.text
+    assert client.get("/app.js").status_code == 200
+    assert client.get("/styles.css").status_code == 200
+
+
 @pytest.mark.parametrize("path,total", [("businesses", 24), ("investors", 15)])
 def test_http_profiles_pagination_and_detail(client, path, total):
     page = client.get(f"/api/{path}?limit=2").json()

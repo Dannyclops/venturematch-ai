@@ -1,11 +1,14 @@
 """FastAPI entry point for the local, synthetic-data demo."""
 
+import os
+from pathlib import Path
+from secrets import compare_digest
 from typing import Annotated
 
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.concurrency import run_in_threadpool
 
@@ -27,6 +30,9 @@ def create_app(catalog: MatchingCatalog | None = None, *,
     # Load once and fail startup for invalid data, rather than returning empty results.
     source = catalog if catalog is not None else MatchingCatalog.from_demo()
     data = MatchingCatalog.model_validate(source.model_dump()).model_copy(deep=True)
+    demo_code = os.environ.get("VENTUREMATCH_DEMO_ACCESS_CODE", "")
+    if live_agent is not None and os.environ.get("VENTUREMATCH_REQUIRE_DEMO_CODE") == "1" and not demo_code:
+        raise RuntimeError("A demo access code is required for the hosted AI-assisted endpoint.")
     app = FastAPI(
         title="VentureMatch AI — local matching API", version="0.1.0",
         description="Fictional demo records and synthetic FX. Engine-only matching is always available. "
@@ -37,7 +43,7 @@ def create_app(catalog: MatchingCatalog | None = None, *,
         CORSMiddleware,
         allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
         allow_credentials=False, allow_methods=["GET", "POST"],
-        allow_headers=["Content-Type", "X-VentureMatch-Live"],
+        allow_headers=["Content-Type", "X-VentureMatch-Live", "X-VentureMatch-Demo-Code"],
     )
 
     def error_response(status, code, message, issues=None, headers=None):
@@ -174,11 +180,29 @@ def create_app(catalog: MatchingCatalog | None = None, *,
         async def agent_match(
             request: MatchRequest,
             confirm_live: Annotated[str | None, Header(alias="X-VentureMatch-Live")] = None,
+            access_code: Annotated[str | None, Header(alias="X-VentureMatch-Demo-Code")] = None,
         ):
             if confirm_live != "true":
                 return error_response(403, "live_confirmation_required",
                                       "Set X-VentureMatch-Live: true to request a billable AI run.")
+            if demo_code and not compare_digest(access_code or "", demo_code):
+                return error_response(403, "demo_access_required",
+                                      "Enter the demo access code for AI-assisted matching.")
             return await live_agent.match(request, data)
+
+    frontend = Path(__file__).resolve().parents[2] / "frontend"
+
+    @app.get("/", include_in_schema=False)
+    async def index():
+        return FileResponse(frontend / "index.html")
+
+    @app.get("/app.js", include_in_schema=False)
+    async def javascript():
+        return FileResponse(frontend / "app.js", media_type="text/javascript")
+
+    @app.get("/styles.css", include_in_schema=False)
+    async def stylesheet():
+        return FileResponse(frontend / "styles.css", media_type="text/css")
 
     return app
 

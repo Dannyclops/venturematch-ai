@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: venturematch-ai-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -e ./backend
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: VENTUREMATCH_ENABLE_LIVE_AGENT
+        value: "1"
+      - key: VENTUREMATCH_REQUIRE_DEMO_CODE
+        value: "1"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: VENTUREMATCH_DEMO_ACCESS_CODE
+        sync: false

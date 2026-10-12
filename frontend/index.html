@@ -67,6 +67,11 @@
               <div><label for="top-k">Results</label><select id="top-k"><option>3</option><option>1</option><option>2</option><option>5</option><option>10</option></select></div>
               <div><label for="execution">Execution</label><select id="execution"><option value="engine">Free matching engine</option><option value="live" disabled>AI-assisted (unavailable)</option></select></div>
             </div>
+            <div id="demo-code-field" hidden>
+              <label for="demo-code">Demo access code for AI-assisted search</label>
+              <input id="demo-code" type="password" maxlength="128" autocomplete="off" placeholder="Enter the code shared with reviewers" />
+              <p class="field-note">The code is sent only with an AI-assisted search. Free matching needs no code.</p>
+            </div>
             <label class="checkline"><input id="explore" type="checkbox" checked /> Include clearly labelled stage exploration</label>
             <p id="execution-note" class="field-note">Engine mode does not call OpenAI or spend API credits.</p>
             <button class="run-button" id="submit" type="submit">Find matches <span aria-hidden="true">↗</span></button>
