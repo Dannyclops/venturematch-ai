@@ -130,8 +130,8 @@ cd venturematch-ai
 - [x] Implement and test the offline compatibility score
 - [ ] Upgrade the lexical thesis baseline to embedding-based similarity
 - [x] Expose matching functions through local typed tool dispatch
-- [ ] Register tools with the OpenAI agent runtime and verify live tool calls
-- [ ] Build the VentureMatch Agent
+- [x] Register tools and build the bounded VentureMatch Agent runtime
+- [ ] Verify live OpenAI access and end-to-end tool calls in both modes
 - [ ] Build the FastAPI endpoints
 - [ ] Build founder and investor interface flows
 - [ ] Add conversational refinement
@@ -172,6 +172,9 @@ policy, limitations, and runnable offline demo commands.
 
 See [agent tools](docs/agent-tools.md) for request-bound callable interfaces,
 search-filter semantics, and the local tool harness.
+
+See [agent runtime](docs/agent-runtime.md) for the OpenAI runner, evidence-grounded
+output contract, live commands, and verification limitations.
 
 ## License
 

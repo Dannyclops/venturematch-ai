@@ -9,6 +9,8 @@ description = "Backend and agent services for VentureMatch AI"
 requires-python = ">=3.11"
 dependencies = [
     "pydantic>=2.9,<3",
+    "openai>=3.29,<4",
+    "python-dotenv>=1.2,<2",
 ]
 
 [project.optional-dependencies]

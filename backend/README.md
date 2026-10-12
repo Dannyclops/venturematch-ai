@@ -20,6 +20,7 @@ The matching engine must remain usable and testable independently of the languag
 - `app/matching/eligibility.py` applies deterministic hard filters before scoring.
 - `app/matching/scoring.py` scores eligible pairs and ranks both discovery directions.
 - `app/tools/` provides request-bound tool contracts, registry, dispatcher, and demo harness.
+- `app/agent/` provides the OpenAI Agents API adapter, bounded runner, and evidence-only output validation.
 - `python -m app.matching --business business_solargrid_africa` runs the offline JSON demo.
 - `tests/` contains schema, currency-service, and eligibility-engine contract tests.
 - `pyproject.toml` declares the Python and development dependencies.
@@ -54,4 +55,15 @@ See [scoring policy](../docs/compatibility-scoring.md) for weights and limitatio
 
 This invokes the local application tools, not an LLM. See
 [agent tools](../docs/agent-tools.md) for contracts and the remaining runtime integration.
+
+## OpenAI agent runner
+
+```powershell
+.\.venv\Scripts\python.exe -m app.agent --business business_solargrid_africa --definitions
+# Billable live run; needs OPENAI_API_KEY in the repo-root .env or environment:
+.\.venv\Scripts\python.exe -m app.agent --business business_solargrid_africa --live --top-k 3
+```
+
+See [agent runtime](../docs/agent-runtime.md) for configuration, the evidence-only
+explanation policy, lifecycle cleanup, limits, and live-verification requirements.
 

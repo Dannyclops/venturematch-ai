@@ -31,7 +31,10 @@ Thin tool interfaces expose profile analysis, candidate retrieval, scoring, port
 The local tool registry and JSON dispatcher live in `app/tools/`. Each instance is
 bound to a validated request and catalog snapshot; the agent cannot change these through
 tool arguments. Additional search filters apply to every candidate-scoring/evidence path.
-Provider-specific tool registration and the live agent loop are not yet implemented.
+Provider-specific registration and the single-turn Agents API runner are implemented
+in `app/agent/`. Live API access and behavior still need verification. Final rankings
+are rechecked locally; the model selects evidence highlights rather than writing facts.
+See [agent-runtime.md](agent-runtime.md) for limits and lifecycle handling.
 See [agent-tools.md](agent-tools.md) for the exact call and error contracts.
 
 ### 5. Matching engine
