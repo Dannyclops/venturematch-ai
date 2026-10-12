@@ -8,7 +8,8 @@ It is not the separate `openai-agents` package, an Assistants API implementation
 or a fixed sequence presented as an AI run. The model chooses function calls.
 Local scripted-provider tests do not establish remote API access or output quality.
 One successful founder-side live run is now verified as described below; broader
-quality, investor mode, and live-agent HTTP integration remain unverified.
+quality and investor mode remain unverified. The [live-agent HTTP adapter](live-agent-api.md)
+has local integration coverage; paid HTTP verification remains pending.
 
 ## First successful live check (2026-10-12)
 
@@ -180,8 +181,10 @@ not resume a provider session in this version.
 
 The host enforces matching facts; prompts are not a complete prompt-injection defense.
 Catalog data and profiles remain untrusted. No live web enrichment, embedding upgrade,
-live-agent FastAPI route, UI, valuation, or investment execution is included in this phase.
+UI, valuation, or investment execution is included in this phase.
 The separate [engine-only HTTP API](backend-api.md) is available without OpenAI calls.
+The [optional live-agent route](live-agent-api.md) requires explicit server activation
+and a live-request header; it does not change the CLI's behavior.
 
 ## References
 

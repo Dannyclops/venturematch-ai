@@ -2,8 +2,9 @@
 
 This directory contains the Python backend: Pydantic contracts, deterministic
 eligibility and compatibility scoring, local agent tools, a bounded OpenAI agent
-runtime, and an engine-only FastAPI service. Thesis similarity currently uses a
-keyword baseline; embeddings and live agent HTTP routes remain future work.
+runtime, and FastAPI endpoints for engine-only and explicitly enabled AI-assisted
+matching. Thesis similarity currently uses a keyword baseline; embeddings remain
+future work.
 
 The matching engine must remain usable and testable independently of the language model.
 
@@ -55,6 +56,11 @@ Open `http://127.0.0.1:8000/docs`. Profile lists are at `/api/businesses` and
 `/api/metadata` supplies form choices and synthetic FX provenance.
 See [backend API](../docs/backend-api.md) for a runnable PowerShell example,
 validation behavior, response contracts, and verification status.
+
+To expose `/api/agent/match`, set `$env:VENTUREMATCH_ENABLE_LIVE_AGENT = '1'` before
+starting the server. Each request also requires `X-VentureMatch-Live: true` and can
+incur OpenAI charges. `/api/matches` stays engine-only. See
+[AI-assisted API](../docs/live-agent-api.md) for the contract and remaining live checks.
 
 ## Local agent-tool harness
 

@@ -1,6 +1,6 @@
 """HTTP response contracts, reusing the canonical domain models."""
 
-from typing import Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 
 from pydantic import Field
 
@@ -21,11 +21,12 @@ class ProfilePage(SchemaModel, Generic[Profile]):
 class HealthResponse(SchemaModel):
     status: Literal["ok"] = "ok"
     execution_mode: Literal["engine_only"] = "engine_only"
-    live_agent_enabled: Literal[False] = False
+    live_agent_enabled: bool = False
 
 
 class MetadataResponse(SchemaModel):
     execution_mode: Literal["engine_only"] = "engine_only"
+    live_agent_enabled: bool = False
     industries: list[Industry]
     funding_stages: list[FundingStage]
     currencies: list[SupportedCurrency]
@@ -50,3 +51,15 @@ class ApiError(SchemaModel):
 
 class ErrorResponse(SchemaModel):
     error: ApiError
+
+
+class LiveAgentError(ApiError):
+    session_id: str | None = None
+    turn_id: str | None = None
+    diagnostics: dict[str, Any] = Field(default_factory=dict)
+    cleanup_warnings: list[str] = Field(default_factory=list)
+    cleanup_diagnostics: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class LiveErrorResponse(SchemaModel):
+    error: LiveAgentError

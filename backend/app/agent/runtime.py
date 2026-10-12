@@ -313,7 +313,7 @@ class VentureMatchAgent:
                         final_text = candidate_text
                 elif kind == "agent.session.turn.completed":
                     completed = event.get("turn", {}).get("status") == "completed"
-                    usage = event.get("usage")
+                    usage = event.get("usage") or (event.get("turn") or {}).get("usage")
                     break
                 elif kind.endswith((".failed", ".cancelled")) or kind in {"error", "agent.session.error"}:
                     failure = AgentFailure("remote_failure", "The remote session or turn failed or was cancelled.")
@@ -332,6 +332,8 @@ class VentureMatchAgent:
             turn = await client.beta.agents.sessions.turns.retrieve(self.turn_id, session_id=self.session_id)
             if turn.status != "completed":
                 raise AgentFailure("incomplete_turn", "The intended turn has not completed successfully.")
+            if usage is None and getattr(turn, "usage", None) is not None:
+                usage = turn.usage.model_dump(mode="json")
             self._stage = "retrieve_items"
             items = client.beta.agents.sessions.items.list(self.session_id, order="desc", limit=100)
             async for item in items:

@@ -4,7 +4,7 @@
 
 Built for the OpenAI × Istanbul Slush'D hackathon.
 
-> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, the bounded agent runtime, and the engine-only FastAPI service are implemented. One founder-side live AI run succeeded. Investor-side live verification, live-agent HTTP integration, and the user interface remain. See the backend documentation for verification status.
+> **Project status:** Data contracts, synthetic data, currency normalization, eligibility, offline scoring, local agent tools, the bounded agent runtime, and both engine-only and explicitly enabled AI-assisted HTTP matching are implemented. One founder-side live AI run succeeded. Investor-side live verification and the user interface remain. See the backend documentation for verification status.
 
 ## The problem
 
@@ -136,7 +136,8 @@ cd venturematch-ai
 - [x] Verify live OpenAI access and end-to-end founder tool calls
 - [ ] Verify end-to-end investor tool calls and measure live usage/cost
 - [x] Build engine-only FastAPI profile and matching endpoints
-- [ ] Expose verified live agent execution through the API
+- [x] Add an explicitly enabled AI-assisted API adapter with local integration tests
+- [ ] Complete a live investor check and paid HTTP smoke check
 - [ ] Build founder and investor interface flows
 - [ ] Add conversational refinement
 - [ ] Run scenario-based evaluations
@@ -182,6 +183,9 @@ output contract, live commands, and verification limitations.
 
 See [backend API](docs/backend-api.md) for local startup, profile browsing, engine-only
 matching, HTTP contracts, and verification status.
+
+See [AI-assisted API](docs/live-agent-api.md) for explicit activation, request headers,
+execution bounds, safe errors, and remaining live checks.
 
 ## License
 

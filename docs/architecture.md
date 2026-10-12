@@ -19,8 +19,10 @@ Collects structured profile fields and an optional natural-language objective. I
 ### 2. FastAPI service
 
 The implemented service validates requests, lists demo profiles, invokes the local
-matching engine, and returns structured engine-only responses. Live agent HTTP
-execution and session persistence are not implemented. See [backend-api.md](backend-api.md).
+matching engine, and returns structured engine-only responses. An explicitly enabled
+`/api/agent/match` route also runs the bounded agent with a separate live-request header.
+Durable session persistence is not implemented. See [backend-api.md](backend-api.md)
+and [live-agent-api.md](live-agent-api.md).
 
 ### 3. VentureMatch Agent
 
@@ -78,9 +80,13 @@ The first version uses synthetic JSON for portability and transparency. SQLite c
 | `GET` | `/api/investors/{entity_id}` | Retrieve one demo investor |
 | `GET` | `/api/metadata` | Form options and synthetic FX provenance |
 | `POST` | `/api/matches` | Run engine-only matching with structured constraints |
+| `POST` | `/api/agent/match` | Run AI-assisted matching, only when explicitly enabled |
 
-`/api/agent/match` and `/api/agent/refine` remain planned and are not registered.
+`/api/agent/refine` remains planned and is not registered.
 For now, refinement means submitting a new `MatchRequest` with changed constraints.
+AI-assisted requests never silently fall back to engine-only results. Runtime
+configuration belongs to the server; body fields cannot override model, environment,
+timeouts, tool limits, or credentials. One live run is allowed per application process.
 
 ## Match-response requirements
 

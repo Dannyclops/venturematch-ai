@@ -2,8 +2,9 @@
 
 This phase exposes the existing matching engine through FastAPI. It requires no
 OpenAI key, API payment, or outbound network at runtime. Responses explicitly say
-`execution_mode: "engine_only"`. The service does not load `.env`, import the agent
-runtime, create provider sessions, or silently switch to AI execution.
+`execution_mode: "engine_only"`. The default server does not load `.env` or create
+provider clients/sessions. This endpoint never switches to AI execution. A separate
+[AI-assisted endpoint](live-agent-api.md) can be explicitly enabled at startup.
 
 ## Start on Windows
 
@@ -99,7 +100,8 @@ success. Unexpected exception messages are not returned in HTTP responses.
 CORS allows only `http://localhost:3000` and `http://127.0.0.1:3000` for the planned
 frontend. CORS is not authentication. This unauthenticated demo should stay bound to
 loopback; public deployment needs an explicit authentication, request-limit, and
-data-handling design. There are no live `/api/agent/match` or refinement routes yet.
+data-handling design. `/api/agent/match` is available only after explicit server
+activation and requires an intentional live-request header. There is no refinement route.
 
 ## Verification
 
@@ -125,4 +127,5 @@ HTTP tests do not call OpenAI or require a running server. They do require a wor
 asyncio runtime. Earlier sessions stalled at Windows socket-pair initialization;
 the full suite completed in this session. Use normal PowerShell if that environment
 restriction recurs. One founder CLI live run is now verified (see
-[agent runtime](agent-runtime.md)); the HTTP service remains engine-only.
+[agent runtime](agent-runtime.md)). Local tests also cover the optional AI-assisted
+HTTP adapter; a paid HTTP smoke check remains unverified.
